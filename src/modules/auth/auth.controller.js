@@ -19,6 +19,48 @@ const apiResponse = require('../../common/utils/apiResponse');
 const asyncHandler = require('../../common/utils/asyncHandler');
 
 // TODO: Define and export controller handlers wrapped in asyncHandler:
-// e.g.
-// const login = asyncHandler(async (req, res) => { ... });
-// module.exports = { login, ... };
+// 1. verifyKey (POST /admin/verify-key):
+//    - Reads body admin_key and verifies it.
+// 2. getDbState (GET /admin/db-state):
+//    - Returns all orders and users list.
+// 3. verifyOrder (POST /admin/order/verify):
+//    - Update order status, generate passes, trigger emails/SMS.
+// 4. getPaymentScreenshot (GET /admin/payment-screenshot/:filename):
+//    - Serve static screenshot image safely.
+// 5. getPasses (GET /admin/passes):
+//    - Get pass availability config.
+// 6. updatePasses (POST /admin/passes/update):
+//    - Update pass availability options.
+
+const verifyKey = asyncHandler(async (req, res) => {
+  // TODO: Implement verifyKey
+});
+
+const getDbState = asyncHandler(async (req, res) => {
+  // TODO: Implement getDbState
+});
+
+const verifyOrder = asyncHandler(async (req, res) => {
+  // TODO: Implement verifyOrder
+});
+
+const getPaymentScreenshot = asyncHandler(async (req, res) => {
+  // TODO: Implement getPaymentScreenshot
+});
+
+const getPasses = asyncHandler(async (req, res) => {
+  // TODO: Implement getPasses
+});
+
+const updatePasses = asyncHandler(async (req, res) => {
+  // TODO: Implement updatePasses
+});
+
+module.exports = {
+  verifyKey,
+  getDbState,
+  verifyOrder,
+  getPaymentScreenshot,
+  getPasses,
+  updatePasses,
+};

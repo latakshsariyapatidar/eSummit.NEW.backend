@@ -14,7 +14,51 @@ const contentService = require('./content.service');
 const apiResponse = require('../../common/utils/apiResponse');
 const asyncHandler = require('../../common/utils/asyncHandler');
 
-// TODO: Define and export controller handler actions:
-// e.g.
-// const getContentList = asyncHandler(async (req, res) => { ... });
-// module.exports = { getContentList, ... };
+const getEvents = asyncHandler(async (req, res) => {
+  const events = await contentService.getEvents();
+  return apiResponse.success(res, events);
+});
+
+const getSponsors = asyncHandler(async (req, res) => {
+  const sponsors = await contentService.getSponsors();
+  return apiResponse.success(res, sponsors);
+});
+
+const getFAQs = asyncHandler(async (req, res) => {
+  const faqs = await contentService.getFAQs();
+  return apiResponse.success(res, faqs);
+});
+
+const getSchedules = asyncHandler(async (req, res) => {
+  const schedules = await contentService.getSchedules();
+  return apiResponse.success(res, schedules);
+});
+
+const getMerch = asyncHandler(async (req, res) => {
+  const merch = await contentService.getMerch();
+  return apiResponse.success(res, merch);
+});
+
+const getTeams = asyncHandler(async (req, res) => {
+  const teams = await contentService.getTeams();
+  return apiResponse.success(res, teams);
+});
+
+const getConfig = asyncHandler(async (req, res) => {
+  const { key } = req.params;
+  const config = await contentService.getConfig(key);
+  if (!config) {
+    return apiResponse.error(res, `Config key ${key} not found`, 404);
+  }
+  return apiResponse.success(res, config.value);
+});
+
+module.exports = {
+  getEvents,
+  getSponsors,
+  getFAQs,
+  getSchedules,
+  getMerch,
+  getTeams,
+  getConfig,
+};

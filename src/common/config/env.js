@@ -19,8 +19,29 @@
 
 const { z } = require('zod');
 
-// TODO: 1. Design environment variable schema using Zod
-// TODO: 2. Parse process.env against schema, catch error and log detailing exactly what key is missing
-// TODO: 3. Export validated values
+const envSchema = z.object({
+  PORT: z.coerce.number().default(5000),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  MONGODB_URI: z.string().min(1, 'MONGODB_URI is required'),
+  JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),
+  JWT_EXPIRES_IN: z.string().default('7d'),
+  UPI_VPA: z.string().min(1, 'UPI_VPA is required'),
+  UPI_MERCHANT_NAME: z.string().min(1, 'UPI_MERCHANT_NAME is required'),
+  UPI_CURRENCY: z.string().default('INR'),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().optional(),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_FROM: z.string().optional(),
+  ADMIN_KEY: z.string().default('adminkey'),
+});
 
-module.exports = process.env; // Temporary export to prevent crash, replace with validated object
+let env;
+try {
+  env = envSchema.parse(process.env);
+} catch (error) {
+  console.error('❌ Environment validation failed:', error.format());
+  process.exit(1);
+}
+
+module.exports = env;

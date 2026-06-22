@@ -1,28 +1,38 @@
 /**
  * Passes Model - E-Summit '26
  * 
- * Schema tracking individual entry passes. Each pass is tied to a specific buyer/attendee from an Order.
- * 
  * Fields to define:
- * - passId: String (Unique ticket code, e.g. ES26-PASS-XXXX-YYYY, generated on order confirmation)
- * - orderId: ObjectId (Reference to Parent Order)
- * - attendeeIndex: Number (Position of attendee in the order.attendees list)
- * - tier: String (Enum: ['general', 'vip', 'premium', etc.])
- * - status: String (Enum: ['reserved', 'active', 'revoked'])
- * - generatedAt: Date
- * - revokedAt: Date
- * - revokingReason: String
- * 
- * Indexes:
- * - passId (unique)
- * - orderId
+ * - ID: Number (Unique, auto-increment integer ID)
+ * - OrderID: Number (Reference to Order.ID)
+ * - PassType: String (Pass name, e.g. '1 Day Visitor Pass')
+ * - PassPrice: Number
+ * - AttendeeName: String
+ * - AttendeeEmail: String
+ * - AttendeeGender: String
+ * - CollegeName: String
+ * - QRCode: String (Unique ticket QR content, e.g. ES26-XXX-XXXXXX)
+ * - IsPresent: Boolean (default: false)
+ * - AttendedAt: Date (nullable, timestamp of check-in)
+ * - CreatedAt: Date
  */
 
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
-// TODO: 1. Design PassSchema with unique indexes
-// TODO: 2. Export Mongoose model 'Pass'
+const PassSchema = new Schema({
+  // TODO: Implement fields:
+  // - ID: Number (unique)
+  // - OrderID: Number (required)
+  // - PassType: String (required)
+  // - PassPrice: Number (required)
+  // - AttendeeName: String (required)
+  // - AttendeeEmail: String (required)
+  // - AttendeeGender: String (required)
+  // - CollegeName: String (required)
+  // - QRCode: String (required, unique)
+  // - IsPresent: Boolean (default: false)
+  // - AttendedAt: Date (default: null)
+  // Ensure CreatedAt timestamp is auto-generated
+});
 
-module.exports = null; // replace with mongoose.model('Pass', PassSchema);
+module.exports = mongoose.model('Pass', PassSchema);

@@ -26,5 +26,24 @@ const emailProvider = require('./providers/email.provider');
 const smsProvider = require('./providers/sms.provider');
 const logger = require('../../common/lib/logger');
 
-// TODO: Implement NotificationsService coordinating emails and SMS dispatches.
-// module.exports = { sendOrderConfirmation, sendOrderVerificationSuccess, sendOrderRejection };
+const sendOrderConfirmation = async (order, buyerName, buyerEmail) => {
+  // TODO: Compile orderConfirmed.html template and dispatch confirmation email to buyer.
+};
+
+const sendOrderVerificationSuccess = async (order, buyerName, buyerEmail, passes) => {
+  // TODO: Generate QR Code images (base64) for each pass
+  // - Compile orderVerified.html with passes details
+  // - Send email to buyer with passes and inline/attached QR Codes
+  // - Send individual emails to each attendee with their specific pass
+  // - Send transactional check-in instructions SMS to attendees
+};
+
+const sendOrderRejection = async (order, buyerName, buyerEmail, reason) => {
+  // TODO: Compile orderRejected.html with admin comments and dispatch to buyer.
+};
+
+module.exports = {
+  sendOrderConfirmation,
+  sendOrderVerificationSuccess,
+  sendOrderRejection,
+};

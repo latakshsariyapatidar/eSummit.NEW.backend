@@ -17,5 +17,26 @@ const mongoose = require('mongoose');
 const env = require('./env');
 const logger = require('../lib/logger');
 
-// TODO: Implement connectDB using Mongoose
-// module.exports = connectDB;
+const connectDB = async () => {
+  try {
+    mongoose.connection.on('connected', () => {
+      logger.info('Mongoose default connection open to DB');
+    });
+
+    mongoose.connection.on('error', (err) => {
+      logger.error('Mongoose default connection error: ' + err);
+      process.exit(1);
+    });
+
+    mongoose.connection.on('disconnected', () => {
+      logger.warn('Mongoose default connection disconnected');
+    });
+
+    await mongoose.connect(env.MONGODB_URI);
+  } catch (err) {
+    logger.error('Failed to connect to MongoDB:', err);
+    process.exit(1);
+  }
+};
+
+module.exports = connectDB;

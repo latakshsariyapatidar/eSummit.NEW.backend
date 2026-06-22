@@ -31,7 +31,28 @@ const paymentsService = require('../payments/payments.service');
 const notificationsService = require('../notifications/notifications.service');
 const logger = require('../../common/lib/logger');
 
-// TODO: Define and export OrderService class or functions.
-// e.g.
-// class OrdersService { ... }
-// module.exports = new OrdersService();
+// TODO: Implement OrderService features:
+// 1. submitOrder(orderData):
+//    - Perform duplicate UTR check in DB
+//    - Look up or create User by Email / Phone
+//    - Decode payment_screenshot (base64) and write it to screenshots/ directory
+//    - Save Order with Status 'pending'
+//    - Save Pass records for each item in pass_details (generating unique pass IDs server-side)
+//    - Send confirmation email to buyer
+//
+// 2. getOrdersByPhone(phone):
+//    - Look up User by phone number
+//    - Query and return all Orders matching User.ID
+
+const submitOrder = async (orderData) => {
+  // TODO: Implement submitOrder
+};
+
+const getOrdersByPhone = async (phone) => {
+  // TODO: Implement getOrdersByPhone
+};
+
+module.exports = {
+  submitOrder,
+  getOrdersByPhone,
+};

@@ -14,6 +14,25 @@ const apiResponse = require('../../common/utils/apiResponse');
 const asyncHandler = require('../../common/utils/asyncHandler');
 
 // TODO: Define and export controller handler actions:
-// e.g.
-// const scanPass = asyncHandler(async (req, res) => { ... });
-// module.exports = { scanPass, ... };
+// 1. verifyQr (POST /attendance/verify-qr):
+//    - Extracts qr_content from request body
+//    - Calls checkinService to find pass matching QR content
+//    - Returns success response: { "status": "success", "data": { attendee_name, attendee_email, college_name, pass_type, pass_price, is_present } }
+//
+// 2. markAttendance (POST /attendance/mark):
+//    - Extracts qr_content from request body
+//    - Calls checkinService to mark attendee present
+//    - Returns success response: { "status": "success", "data": { attendee_name, attendee_email, attended_at } }
+
+const verifyQr = asyncHandler(async (req, res) => {
+  // TODO: Implement verifyQr
+});
+
+const markAttendance = asyncHandler(async (req, res) => {
+  // TODO: Implement markAttendance
+});
+
+module.exports = {
+  verifyQr,
+  markAttendance,
+};

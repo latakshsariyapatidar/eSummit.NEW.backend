@@ -26,7 +26,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-const mongoSanitize = require('express-mongo-sanitize');
 
 // Import common configuration and custom middlewares
 const env = require('./common/config/env');
@@ -44,9 +43,69 @@ const contentRouter = require('./modules/content/content.routes');
 
 const app = express();
 
-// TODO: 1. Setup global middlewares (CORS, Helmet, Parsers, Rate Limiting, Request Logger)
-// TODO: 2. Mount API Routes (/api/auth, /api/orders, /api/passes, /api/payments, /api/checkin, /api/content)
+// Custom MongoDB Injection Sanitizer compatible with Express 5
+const mongoSanitize = (req, res, next) => {
+  const sanitizeObject = (obj) => {
+    if (obj && typeof obj === 'object') {
+      for (const key in obj) {
+        if (key.startsWith('$') || key.includes('.')) {
+          delete obj[key];
+        } else if (typeof obj[key] === 'object') {
+          sanitizeObject(obj[key]);
+        }
+      }
+    }
+  };
+
+  sanitizeObject(req.body);
+  sanitizeObject(req.params);
+  sanitizeObject(req.query);
+  next();
+};
+
+// Setup global middleware stubs
+app.use(helmet());
+app.use(cors({
+  origin: '*', // TODO: Configure Access-Control-Allow-Origin according to CORS requirements
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'X-Admin-Key'],
+}));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(cookieParser());
+app.use(mongoSanitize);
+
+
+
+// TODO: 1. Setup rate limiting and request logger middleware:
+app.use(requestLogger);
+// app.use('/api/admin', authLimiter);
+// app.use('/api/order', paymentLimiter);
+
+// TODO: 2. Mount API Routes conforming to endpoints specification:
+// - /api/admin      -> authRouter (Admin Key Verify, DB State, Verify Order, Screenshot, passes config)
+// - /api/order      -> ordersRouter (Submit Order, Order Status)
+// - /api/attendance -> checkinRouter (Verify QR, Mark Attendance)
+app.use('/api/admin', authRouter);
+app.use('/api/order', ordersRouter);
+app.use('/api/attendance', checkinRouter);
+app.use('/api/content', contentRouter);
+
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    message: 'Server is running',
+    timestamp: Date.now(),
+  });
+});
+
 // TODO: 3. Handle undefined routes (throw a standard 404 API error)
+app.use((req, res, next) => {
+  const err = new Error('Endpoint not found');
+  err.statusCode = 404;
+  next(err);
+});
+
 // TODO: 4. Mount global errorHandler middleware as the final middleware
+app.use(errorHandler);
 
 module.exports = app;

@@ -8,6 +8,12 @@
 
 const logger = require('../lib/logger');
 
-// TODO: Define custom request logger middleware
-// const requestLogger = (req, res, next) => { ... };
-// module.exports = requestLogger;
+const requestLogger = (req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    logger.info(`${req.method} ${req.originalUrl || req.url} ${res.statusCode} - ${duration}ms [IP: ${req.ip}]`);
+  });
+  next();
+};
+module.exports = requestLogger;

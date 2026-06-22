@@ -11,10 +11,43 @@
  * - removeContent(id)        -> Deletes dynamic records.
  */
 
-const { Speaker, Schedule, Sponsor, FAQ } = require('./content.model');
+const { Event, Sponsor, FAQ, Schedule, Merch, Config, Team } = require('./content.model');
 const logger = require('../../common/lib/logger');
 
-// TODO: Define and export ContentService class or functions.
-// e.g.
-// class ContentService { ... }
-// module.exports = new ContentService();
+const getEvents = async () => {
+  return await Event.find({});
+};
+
+const getSponsors = async () => {
+  return await Sponsor.find({});
+};
+
+const getFAQs = async () => {
+  return await FAQ.find({});
+};
+
+const getSchedules = async () => {
+  return await Schedule.find({});
+};
+
+const getMerch = async () => {
+  return await Merch.find({});
+};
+
+const getConfig = async (key) => {
+  return await Config.findOne({ key });
+};
+
+const getTeams = async () => {
+  return await Team.find({});
+};
+
+module.exports = {
+  getEvents,
+  getSponsors,
+  getFAQs,
+  getSchedules,
+  getMerch,
+  getConfig,
+  getTeams,
+};

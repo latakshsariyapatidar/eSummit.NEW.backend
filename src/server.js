@@ -21,6 +21,13 @@ const env = require('./common/config/env');
 const connectDB = require('./common/config/db');
 const logger = require('./common/lib/logger');
 
+connectDB();
+
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+
 // TODO: 1. Initialize database connection via connectDB()
 // TODO: 2. Bind application port and start listening (server.listen(PORT, ...))
 // TODO: 3. Setup listeners for uncaughtException and unhandledRejection

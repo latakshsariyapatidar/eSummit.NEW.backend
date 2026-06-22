@@ -18,15 +18,72 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-// TODO: 1. Design SpeakerSchema
-// TODO: 2. Design ScheduleSchema
-// TODO: 3. Design SponsorSchema
-// TODO: 4. Design FaqSchema
-// TODO: 5. Export Mongoose models
+const EventSchema = new Schema({
+  slug: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  tagline: { type: String },
+  day: { type: String },
+  time: { type: String },
+  about: { type: String },
+  brief: { type: String },
+  format: { type: [String] },
+});
+
+const SponsorSchema = new Schema({
+  name: { type: String, required: true },
+  tier: { type: String, required: true },
+  logoType: { type: String },
+});
+
+const FAQSchema = new Schema({
+  q: { type: String, required: true },
+  a: { type: String, required: true },
+});
+
+const ScheduleSchema = new Schema({
+  day: { type: String, required: true },
+  items: [{
+    time: { type: String, required: true },
+    title: { type: String, required: true },
+    category: { type: String },
+    location: { type: String },
+  }],
+});
+
+const MerchSchema = new Schema({
+  id: { type: String, required: true },
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  img: { type: String },
+});
+
+const ConfigSchema = new Schema({
+  key: { type: String, required: true, unique: true },
+  value: { type: Schema.Types.Mixed },
+});
+
+const TeamSchema = new Schema({
+  lead: {
+    name: { type: String },
+    role: { type: String },
+    team: { type: String },
+    email: { type: String },
+    bio: { type: String },
+    image: { type: String },
+    event: { type: String },
+  },
+  crew: [{
+    name: { type: String },
+    image: { type: String },
+  }],
+});
 
 module.exports = {
-  Speaker: null,
-  Schedule: null,
-  Sponsor: null,
-  FAQ: null,
+  Event: mongoose.model('Event', EventSchema, 'events'),
+  Sponsor: mongoose.model('Sponsor', SponsorSchema, 'sponsors'),
+  FAQ: mongoose.model('FAQ', FAQSchema, 'faqs'),
+  Schedule: mongoose.model('Schedule', ScheduleSchema, 'schedules'),
+  Merch: mongoose.model('Merch', MerchSchema, 'merch'),
+  Config: mongoose.model('Config', ConfigSchema, 'configs'),
+  Team: mongoose.model('Team', TeamSchema, 'teams'),
 };

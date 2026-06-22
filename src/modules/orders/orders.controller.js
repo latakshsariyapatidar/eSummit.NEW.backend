@@ -14,11 +14,31 @@
  */
 
 const ordersService = require('./orders.service');
-const { checkoutSchema, paymentProofSchema } = require('./orders.validation');
 const apiResponse = require('../../common/utils/apiResponse');
 const asyncHandler = require('../../common/utils/asyncHandler');
+const { orderSubmitSchema } = require('./orders.validation');
 
 // TODO: Define and export controller handler actions:
-// e.g.
-// const checkout = asyncHandler(async (req, res) => { ... });
-// module.exports = { checkout, ... };
+// 1. submitOrder (POST /order/submit):
+//    - Validates request body using orderSubmitSchema
+//    - Call ordersService.submitOrder()
+//    - Returns HTTP 201 success response: { "status": "success", "order_id": "number or string" }
+//
+// 2. getOrderStatus (GET /order/status?phone={phone}):
+//    - Retrieve phone query parameter
+//    - Call ordersService.getOrdersByPhone()
+//    - Format and return orders:
+//      [ { ID, Status, OrderType, PaymentUTR, Items, CreatedAt, UpdatedAt } ]
+
+const submitOrder = asyncHandler(async (req, res) => {
+  // TODO: Implement submitOrder
+});
+
+const getOrderStatus = asyncHandler(async (req, res) => {
+  // TODO: Implement getOrderStatus
+});
+
+module.exports = {
+  submitOrder,
+  getOrderStatus,
+};

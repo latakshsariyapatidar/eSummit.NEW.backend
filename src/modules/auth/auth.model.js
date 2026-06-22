@@ -1,34 +1,21 @@
 /**
- * Auth Model - E-Summit '26
- * 
- * Defines the Mongoose database schema for E-Summit users (Admins, Sub-Admins, and gate Volunteers).
+ * User Model - E-Summit '26
  * 
  * Fields to define:
- * - name: String (Full name of volunteer/admin)
- * - email: String (Unique email, formatted, lowercase, indexed)
- * - password: String (Hashed password stored securely)
- * - role: String (Enum: ['admin', 'volunteer', 'sub-admin'])
- * - isActive: Boolean (Enable/disable credentials to revoke access)
- * - permissions: Array of strings (Granular capabilities if required)
- * - resetPasswordToken: String (Hash of password reset token)
- * - resetPasswordExpires: Date (TTL of password reset token)
- * - lastLogin: Date (Track login activity)
- * 
- * Pre-save hooks:
- * - Automatically hash password using bcrypt if modified.
- * 
- * Model methods:
- * - comparePassword(candidatePassword) -> Returns true if password matches.
+ * - ID: Number (Unique, auto-increment integer ID)
+ * - Email: String (Unique email, lowercase, indexed)
+ * - Phone: String (10 digit phone number)
+ * - Name: String (User's full name)
+ * - Gender: String (Enum: ['male', 'female', 'other'])
+ * - Timestamps: CreatedAt, UpdatedAt (ISO 8601 strings)
  */
 
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-
 const Schema = mongoose.Schema;
 
-// TODO: 1. Design UserSchema with indexes and validation
-// TODO: 2. Add pre-save hook to hash password (using bcrypt)
-// TODO: 3. Add instance method `comparePassword` to verify logins
-// TODO: 4. Export Mongoose model 'User'
+const UserSchema = new Schema({
+  // TODO: Implement fields: ID (Number, unique), Email (String, unique, required), Phone (String, required), Name (String, required), Gender (String, enum: ['male', 'female', 'other'], required)
+  // Ensure timestamps are enabled (CreatedAt, UpdatedAt mapping)
+});
 
-module.exports = null; // replace with mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

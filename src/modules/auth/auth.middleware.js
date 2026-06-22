@@ -21,5 +21,15 @@ const User = require('./auth.model');
 const env = require('../../common/config/env');
 const apiResponse = require('../../common/utils/apiResponse');
 
-// TODO: Create middlewares (protect, requireAdmin, requireVolunteer)
-// module.exports = { protect, requireAdmin, requireVolunteer };
+const verifyAdminKey = (req, res, next) => {
+  // TODO: Validate X-Admin-Key header on every admin request.
+  // - Return 401/403 if key is invalid or missing.
+  // - Log all admin actions for audit trail.
+  next();
+};
+
+module.exports = {
+  verifyAdminKey,
+  protect: verifyAdminKey,
+  requireAdmin: verifyAdminKey,
+};

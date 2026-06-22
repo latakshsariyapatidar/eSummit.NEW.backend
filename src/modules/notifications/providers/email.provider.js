@@ -15,8 +15,12 @@ const nodemailer = require('nodemailer');
 const env = require('../../../common/config/env');
 const logger = require('../../../common/lib/logger');
 
-// TODO: 1. Setup nodemailer transporter using env variables (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS)
-// TODO: 2. Export functions/class to dispatch emails
-// e.g.
-// const sendMail = async ({ to, subject, html }) => { ... };
-// module.exports = { sendMail };
+const sendMail = async ({ to, subject, html, attachments }) => {
+  // TODO: Setup nodemailer transporter using env variables (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS)
+  // - Send email using SMTP settings (from SMTP_FROM)
+  // - Support attachments for QR code images/tickets
+  logger.info(`[Email Mock] Sending to: ${to}, Subject: ${subject}`);
+  return { messageId: 'mock-id' };
+};
+
+module.exports = { sendMail };

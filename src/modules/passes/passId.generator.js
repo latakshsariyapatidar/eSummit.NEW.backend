@@ -16,5 +16,11 @@
 const crypto = require('crypto');
 const Pass = require('./passes.model');
 
-// TODO: Implement unique ticket/pass ID generator
-// module.exports = { generatePassId };
+const generatePassId = async (tier) => {
+  // TODO: Implement unique ticket/pass ID generator
+  // - Creates a random alphanumeric string with format: ES26-[TIER-CODE]-[RANDOM-CHARS]
+  // - Verifies against Database to ensure absolute uniqueness (fallback collisions prevention).
+  return `ES26-${(tier || 'GEN').substring(0, 3).toUpperCase()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+};
+
+module.exports = { generatePassId };

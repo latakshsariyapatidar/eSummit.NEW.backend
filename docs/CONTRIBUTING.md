@@ -1,46 +1,238 @@
 # Contributing to E-Summit '26 Backend
 
-First off, thank you for considering contributing to the E-Summit '26 backend server! This project powers checkout ticketing and gating controls for IIT Roorkee's flagship entrepreneurship event. Adhering to the following guidelines ensures a smooth collaboration environment.
+Thank you for your interest in contributing to the E-Summit '26 backend! This project powers the digital infrastructure for IIT Dharwad's flagship entrepreneurship festival. Your contributions help make the event a success.
+
+---
+
+## Table of Contents
+
+- [Code of Conduct](#code-of-conduct)
+- [Getting Started](#getting-started)
+- [Branch Conventions](#branch-conventions)
+- [Module Architecture](#module-architecture)
+- [Coding Standards](#coding-standards)
+- [Commit Guidelines](#commit-guidelines)
+- [Pull Request Process](#pull-request-process)
+- [Common Patterns](#common-patterns)
+
+---
 
 ## Code of Conduct
-Please be polite, collaborative, and professional in all interactions.
+
+- Be respectful, polite, and collaborative in all interactions.
+- Focus on constructive feedback during code reviews.
+- Report issues through GitHub rather than personal channels.
+
+---
+
+## Getting Started
+
+1. **Fork** the repository on GitHub.
+2. **Clone** your fork locally:
+   ```bash
+   git clone https://github.com/your-username/esummit26-backend.git
+   cd esummit26-backend
+   ```
+3. **Install** dependencies:
+   ```bash
+   npm install
+   ```
+4. **Configure** your environment:
+   ```bash
+   cp .env.example .env
+   # Fill in MONGODB_URI, ADMIN_KEY, etc.
+   ```
+5. **Seed** the database:
+   ```bash
+   npm run seed
+   ```
+6. **Start** the dev server:
+   ```bash
+   npm run dev
+   ```
+
+---
 
 ## Branch Conventions
-We utilize a modular development approach:
-- Main Branch: `main` (production stable)
-- Development Branch: `dev` (integration branch)
-- Feature branches should target `dev` and follow: `feat/feature-name` or `fix/bug-name`.
 
-## Folder Organization
-The codebase follows a strictly modular layout under `src/modules/`.
-Each feature folder includes:
-- `*.routes.js` - Routing endpoints
-- `*.controller.js` - HTTP Request/Response parsers
-- `*.service.js` - Core logical functions
-- `*.model.js` - Mongoose entity schema definitions
-- `*.validation.js` - Payload validators (Zod schemas)
-- `README.md` - Sub-module context
+| Branch | Purpose |
+|---|---|
+| `main` | Production-stable releases |
+| `dev` | Integration branch — all PRs target here |
+| `feat/feature-name` | New feature development |
+| `fix/bug-name` | Bug fixes |
+| `docs/change-name` | Documentation updates |
+| `refactor/scope` | Code restructuring |
+| `test/scope` | Test additions or fixes |
 
-Shared infrastructure elements belong in `src/common/`.
+**Always branch from `dev`**, never from `main`:
+```bash
+git checkout dev
+git pull origin dev
+git checkout -b feat/your-feature
+```
 
-## Setup Instructions
-1. Clone the repository.
-2. Run `npm install` to setup node dependencies.
-3. Duplicate `.env.example` to `.env` and fill out your local variables (MongoDB URI, SMTP, etc.).
-4. Run `npm run dev` to launch development nodemon server.
+---
 
-## Code Standards
-- **Lints & Style**: We use ESLint and Prettier. Check your code style prior to committing:
+## Module Architecture
+
+The codebase follows a **modular monolith** pattern. Each domain feature is self-contained under `src/modules/`:
+
+```
+src/modules/your-feature/
+├── your-feature.routes.js       # Express router with endpoint definitions
+├── your-feature.controller.js   # HTTP request/response handling
+├── your-feature.service.js      # Core business logic
+├── your-feature.model.js        # Mongoose schema definitions
+├── your-feature.validation.js   # Zod input validation schemas (optional)
+└── README.md                    # Module documentation
+```
+
+**Shared infrastructure** (config, middleware, utilities) lives in `src/common/`.
+
+### Key Rules
+
+- **Never** put business logic in route files or controllers.
+- **Controllers** only parse requests and call services.
+- **Services** contain all business logic and database operations.
+- **Models** define schemas — no logic beyond virtuals, hooks, and statics.
+- **New environment variables** must be added to both `.env.example` and `src/common/config/env.js`.
+
+---
+
+## Coding Standards
+
+### Style
+
+- **Linter**: ESLint (flat config) — run before every commit:
   ```bash
   npx eslint .
   ```
-- **Tests**: Write unit/integration tests for your endpoints under the `tests/` directory. Run tests with:
-  ```bash
-  npm run test
-  ```
-- **Error Handling**: Do not write bare `try-catch` blocks inside Express routes. Wrap controller handlers with the `asyncHandler` helper.
+- **Formatter**: Prettier
+- **Quotes**: Single quotes (`'`)
+- **Semicolons**: Always
+- **Indentation**: 2 spaces
+- **Strict equality**: Always use `===`
+- **Curly braces**: Required on all blocks (even single-line)
 
-## Pull Request Guidelines
-1. Ensure all tests pass and ESLint checks are green.
-2. Link your Pull Request to the corresponding GitHub issue.
-3. Provide a clear description of the modifications, adding details about changes, new environment keys, or updated schemas.
+### Error Handling
+
+- **Never** use bare `try-catch` blocks in Express routes.
+- **Always** wrap controller handlers with the `asyncHandler` utility:
+  ```js
+  const asyncHandler = require('../../common/utils/asyncHandler');
+
+  exports.myHandler = asyncHandler(async (req, res) => {
+    // your code — errors auto-propagate to errorHandler
+  });
+  ```
+- Throw errors with `statusCode` for the global error handler to format:
+  ```js
+  const err = new Error('Resource not found');
+  err.statusCode = 404;
+  throw err;
+  ```
+
+### API Responses
+
+Use the standardised response utilities from `src/common/utils/apiResponse.js`:
+```js
+const { sendSuccess, sendError } = require('../../common/utils/apiResponse');
+
+// Success
+sendSuccess(res, data, 'Operation completed', 200);
+
+// Error
+sendError(res, 'Something went wrong', 400);
+```
+
+---
+
+## Commit Guidelines
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/) for clear history:
+
+```
+<type>(<scope>): <short description>
+
+[optional body]
+```
+
+**Types:**
+
+| Type | Description |
+|---|---|
+| `feat` | New feature |
+| `fix` | Bug fix |
+| `docs` | Documentation only |
+| `style` | Code style (no logic change) |
+| `refactor` | Code restructuring |
+| `test` | Adding/fixing tests |
+| `chore` | Build, CI, or tooling changes |
+
+**Examples:**
+```
+feat(orders): add duplicate UTR detection on submit
+fix(checkin): handle expired pass gracefully
+docs(api): add rate limit info to API.md
+```
+
+---
+
+## Pull Request Process
+
+1. **Ensure** your branch is up-to-date with `dev`:
+   ```bash
+   git fetch origin
+   git rebase origin/dev
+   ```
+2. **Run** all checks locally:
+   ```bash
+   npx eslint .
+   npm test
+   ```
+3. **Submit** your PR against the `dev` branch.
+4. **Fill out** the PR template with:
+   - What the change does and why
+   - Any new environment variables introduced
+   - Any schema/model changes
+   - Screenshots (for admin dashboard or API changes)
+5. **Link** the PR to the relevant GitHub issue (if applicable).
+6. **Address** review feedback promptly.
+
+### PR Checklist
+
+- [ ] Code follows the module pattern (routes → controller → service → model)
+- [ ] ESLint passes with no errors
+- [ ] Tests written for new/changed endpoints
+- [ ] All tests pass
+- [ ] New env vars added to `.env.example` and `env.js`
+- [ ] Module README updated (if applicable)
+- [ ] No hardcoded secrets or credentials
+
+---
+
+## Common Patterns
+
+### Adding a New Module
+
+1. Create the directory: `src/modules/your-module/`
+2. Create the standard files: `routes`, `controller`, `service`, `model`, `README.md`
+3. Mount the router in `src/app.js`:
+   ```js
+   const yourRouter = require('./modules/your-module/your-module.routes');
+   app.use('/api/your-module', yourRouter);
+   ```
+4. Add tests in `tests/your-module.test.js`
+
+### Adding a New Content Type
+
+1. Add the Mongoose schema to `src/modules/content/content.model.js`
+2. Add the service method in `content.service.js`
+3. Add the controller handler in `content.controller.js`
+4. Add the route in `content.routes.js`
+5. Add seed data to `scripts/seed.js`
+
+---
+
+*Questions? Open a GitHub issue or start a discussion — we're here to help!*

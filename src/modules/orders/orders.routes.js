@@ -15,9 +15,11 @@
 const express = require('express');
 const router = express.Router();
 const ordersController = require('./orders.controller');
-const { protect, requireAdmin } = require('../auth/auth.middleware');
+// TODO: Setup public booking routes:
+// - POST /submit -> submitOrder handler
+// - GET /status -> getOrderStatus handler
 
-// TODO: 1. Setup public booking routes (checkout, submit payment, check status)
-// TODO: 2. Setup protected administrative routes (list, manual verification / rejection)
+router.post('/submit', ordersController.submitOrder);
+router.get('/status', ordersController.getOrderStatus);
 
 module.exports = router;

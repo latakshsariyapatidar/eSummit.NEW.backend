@@ -14,7 +14,11 @@ const router = express.Router();
 const checkinController = require('./checkin.controller');
 const { protect, requireVolunteer } = require('../auth/auth.middleware');
 
-// TODO: 1. Setup scans endpoint (restricted to volunteers/admins)
-// TODO: 2. Setup checking stats & history endpoints (restricted to admins)
+// TODO: Setup attendance entry-gate endpoints:
+// - POST /verify-qr -> verifyQr handler
+// - POST /mark -> markAttendance handler
+
+router.post('/verify-qr', checkinController.verifyQr);
+router.post('/mark', checkinController.markAttendance);
 
 module.exports = router;

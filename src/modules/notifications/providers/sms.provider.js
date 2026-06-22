@@ -14,6 +14,10 @@
 const env = require('../../../common/config/env');
 const logger = require('../../../common/lib/logger');
 
-// TODO: Implement custom HTTP post or API client connection to dispatch text messages.
-// const sendSms = async (to, message) => { ... };
-// module.exports = { sendSms };
+const sendSms = async (to, message) => {
+  // TODO: Implement custom HTTP post or API client connection to dispatch text messages.
+  logger.info(`[SMS Mock] Sending to: ${to}, Message: ${message}`);
+  return { success: true };
+};
+
+module.exports = { sendSms };

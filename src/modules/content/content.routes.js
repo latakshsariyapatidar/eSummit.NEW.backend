@@ -15,9 +15,14 @@
 const express = require('express');
 const router = express.Router();
 const contentController = require('./content.controller');
-const { protect, requireAdmin } = require('../auth/auth.middleware');
 
-// TODO: 1. Setup public fetch content endpoints (events, sponsors, faqs)
-// TODO: 2. Setup administrative mutation endpoints (protect, requireAdmin)
+// Public fetch content endpoints
+router.get('/events', contentController.getEvents);
+router.get('/sponsors', contentController.getSponsors);
+router.get('/faqs', contentController.getFAQs);
+router.get('/schedule', contentController.getSchedules);
+router.get('/merch', contentController.getMerch);
+router.get('/teams', contentController.getTeams);
+router.get('/config/:key', contentController.getConfig);
 
 module.exports = router;

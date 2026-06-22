@@ -13,7 +13,38 @@
 const rateLimit = require('express-rate-limit');
 const apiResponse = require('../utils/apiResponse');
 
-// TODO: Setup limits configuring express-rate-limit options.
-// e.g.
-// const authLimiter = rateLimit({ windowMs: 15*60*1000, max: 5, ... });
-// module.exports = { authLimiter, ... };
+const standardLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => {
+    return apiResponse.error(res, 'Too many requests, please try again later.', 429);
+  }
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10, // Limit login / key verify to 10 requests per 15 minutes
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => {
+    return apiResponse.error(res, 'Too many authentication attempts, please try again later.', 429);
+  }
+});
+
+const paymentLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30, // Limit order submits / checks
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => {
+    return apiResponse.error(res, 'Too many order operations, please try again later.', 429);
+  }
+});
+
+module.exports = {
+  standardLimiter,
+  authLimiter,
+  paymentLimiter
+};

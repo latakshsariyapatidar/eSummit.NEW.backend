@@ -16,9 +16,22 @@
 
 const { z } = require('zod');
 
-// TODO: 1. Design checkoutSchema using Zod
-// TODO: 2. Design paymentProofSchema using Zod
-// TODO: 3. Export validation schemas
-// e.g.
-// const checkoutSchema = z.object({ ... });
-// module.exports = { checkoutSchema, ... };
+// TODO: Design orderSubmitSchema using Zod.
+// Fields to validate:
+// - phone: String (10 digits)
+// - email: String (valid email)
+// - gender: String (enum: ['male', 'female', 'other'])
+// - order_type: String (enum: ['pass', 'merch'])
+// - items: Array of strings
+// - payment_utr: String
+// - payment_screenshot: String (base64 encoded image)
+// - showPassDetails: Boolean
+// - pass_details: Array of objects (max 5 items, containing: passType, passPrice, attendeeName, attendeeEmail, attendeeGender, collegeName)
+
+const orderSubmitSchema = z.object({
+  // Implement Zod verification fields
+});
+
+module.exports = {
+  orderSubmitSchema,
+};

@@ -1,15 +1,27 @@
 {
-  "name": "esummit26.new.backend",
+  "name": "esummit26-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend API server for E-Summit '26 — IIT Dharwad's flagship entrepreneurship festival. Handles ticketing, UPI payments, gate check-ins, content CMS, and admin dashboard.",
+  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest"
+    "test": "jest",
+    "seed": "node scripts/seed.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "esummit",
+    "iit-dharwad",
+    "express",
+    "mongodb",
+    "ticketing",
+    "event-management",
+    "backend",
+    "api"
+  ],
+  "author": "IIC, IIT Dharwad",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
@@ -22,6 +34,7 @@
     "express-rate-limit": "^8.5.2",
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.3.0",
     "mongoose": "^9.7.1",
     "nodemailer": "^9.0.1",
     "qrcode": "^1.5.4",
