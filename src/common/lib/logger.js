@@ -30,7 +30,7 @@ const logger = {
     if (process.env.NODE_ENV !== 'production') {
       console.debug(`\x1b[36m[DEBUG]\x1b[0m ${new Date().toISOString()}:`, ...args);
     }
-  }
+  },
 };
 
 module.exports = logger;

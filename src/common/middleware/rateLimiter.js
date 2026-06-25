@@ -20,7 +20,7 @@ const standardLimiter = rateLimit({
   legacyHeaders: false,
   handler: (req, res) => {
     return apiResponse.error(res, 'Too many requests, please try again later.', 429);
-  }
+  },
 });
 
 const authLimiter = rateLimit({
@@ -30,7 +30,7 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
   handler: (req, res) => {
     return apiResponse.error(res, 'Too many authentication attempts, please try again later.', 429);
-  }
+  },
 });
 
 const paymentLimiter = rateLimit({
@@ -40,11 +40,11 @@ const paymentLimiter = rateLimit({
   legacyHeaders: false,
   handler: (req, res) => {
     return apiResponse.error(res, 'Too many order operations, please try again later.', 429);
-  }
+  },
 });
 
 module.exports = {
   standardLimiter,
   authLimiter,
-  paymentLimiter
+  paymentLimiter,
 };

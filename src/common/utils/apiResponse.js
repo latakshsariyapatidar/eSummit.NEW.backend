@@ -23,8 +23,8 @@ const apiResponse = {
   //   { "status": "success", "data": { ... }, "message": "optional" }
   success: (res, data = null, message = undefined, statusCode = 200) => {
     const payload = { status: 'success' };
-    if (data !== null) payload.data = data;
-    if (message !== undefined) payload.message = message;
+    if (data !== null) {payload.data = data;}
+    if (message !== undefined) {payload.message = message;}
     return res.status(statusCode).json(payload);
   },
 
@@ -35,9 +35,9 @@ const apiResponse = {
   error: (res, message = 'Something went wrong', statusCode = 500) => {
     return res.status(statusCode).json({
       status: 'error',
-      message
+      message,
     });
-  }
+  },
 };
 
 module.exports = apiResponse;
