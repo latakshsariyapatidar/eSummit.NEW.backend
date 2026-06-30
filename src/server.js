@@ -24,8 +24,8 @@ const logger = require('./common/lib/logger');
 connectDB();
 
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(env.PORT, () => {
+  console.log('Server is running on port ' + env.PORT);
 });
 
 // TODO: 1. Initialize database connection via connectDB()
