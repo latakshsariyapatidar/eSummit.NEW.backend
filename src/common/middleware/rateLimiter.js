@@ -25,7 +25,7 @@ const standardLimiter = rateLimit({
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10, // Limit login / key verify to 10 requests per 15 minutes
+  max: 20, // Limit login / key verify to 10 requests per 15 minutes
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
