@@ -12,12 +12,12 @@
  *    - rateLimiter (DDoS and brute-force prevention)
  *    - requestLogger (HTTP request tracking)
  * 3. Mounting the routers of all functional modules:
- *    - /api/auth       -> auth.routes
- *    - /api/orders     -> orders.routes
- *    - /api/passes     -> passes.routes
- *    - /api/payments   -> payments.routes
- *    - /api/checkin    -> checkin.routes
- *    - /api/content    -> content.routes
+ *    - /auth       -> auth.routes
+ *    - /orders     -> orders.routes
+ *    - /passes     -> passes.routes
+ *    - /payments   -> payments.routes
+ *    - /checkin    -> checkin.routes
+ *    - /content    -> content.routes
  * 4. Handling 404/Not Found requests.
  * 5. Registering the global error handler middleware.
  */
@@ -79,20 +79,20 @@ app.use(mongoSanitize);
 
 // TODO: 1. Setup rate limiting and request logger middleware:
 app.use(requestLogger);
-// app.use('/api/admin', authLimiter);
-// app.use('/api/order', paymentLimiter);
+// app.use('/admin', authLimiter);
+// app.use('/order', paymentLimiter);
 
 // TODO: 2. Mount API Routes conforming to endpoints specification:
-// - /api/admin      -> authRouter (Admin Key Verify, DB State, Verify Order, Screenshot, passes config)
-// - /api/order      -> ordersRouter (Submit Order, Order Status)
-// - /api/attendance -> checkinRouter (Verify QR, Mark Attendance)
-app.use('/api/auth', authRouter);
-app.use('/api/admin', adminRouter);
-app.use('/api/order', ordersRouter);
-app.use('/api/attendance', checkinRouter);
-app.use('/api/content', contentRouter);
+// - /admin      -> authRouter (Admin Key Verify, DB State, Verify Order, Screenshot, passes config)
+// - /order      -> ordersRouter (Submit Order, Order Status)
+// - /attendance -> checkinRouter (Verify QR, Mark Attendance)
+app.use('/auth', authRouter);
+app.use('/admin', adminRouter);
+app.use('/order', ordersRouter);
+app.use('/attendance', checkinRouter);
+app.use('/content', contentRouter);
 
-app.get('/api/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.status(200).json({
     message: 'Server is running',
     timestamp: Date.now(),
