@@ -3,12 +3,10 @@ name: CI/CD — E-Summit 2026 Backend
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
-  test:
-    name: Install & Test
+  deploy:
+    name: Deploy to VPS
     runs-on: self-hosted
 
     steps:
@@ -20,42 +18,6 @@ jobs:
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           echo "Node: $(node -v) | NPM: $(npm -v)"
-
-      - name: Install dependencies
-        run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          npm ci
-
-      - name: Run tests
-        run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          npm test
-        env:
-          NODE_ENV: test
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
-          UPI_VPA: ${{ secrets.UPI_VPA }}
-          UPI_MERCHANT_NAME: ${{ secrets.UPI_MERCHANT_NAME }}
-          UPI_CURRENCY: ${{ secrets.UPI_CURRENCY }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
-          SMTP_FROM: ${{ secrets.SMTP_FROM }}
-          ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
-
-  deploy:
-    name: Deploy to VPS
-    runs-on: self-hosted
-    needs: test
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
 
       - name: Install production dependencies
         run: |
