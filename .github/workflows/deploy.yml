@@ -27,7 +27,7 @@ jobs:
 
       - name: Write .env file
         run: |
-          cat > .env << 'EOF'
+          cat > .env << EOF
           PORT=${{ secrets.PORT }}
           NODE_ENV=production
           MONGODB_URI=${{ secrets.MONGODB_URI }}
