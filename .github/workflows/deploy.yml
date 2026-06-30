@@ -48,7 +48,7 @@ jobs:
         run: |
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          pm2 reload esummit-backend || pm2 start src/app.js --name "esummit-backend"
+          pm2 reload esummit-backend || pm2 start src/server.js --name "esummit-backend"
           pm2 save
 
       - name: Verify
