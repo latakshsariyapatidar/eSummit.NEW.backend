@@ -34,7 +34,18 @@ jobs:
           npm test
         env:
           NODE_ENV: test
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+          UPI_VPA: ${{ secrets.UPI_VPA }}
+          UPI_MERCHANT_NAME: ${{ secrets.UPI_MERCHANT_NAME }}
+          UPI_CURRENCY: ${{ secrets.UPI_CURRENCY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
 
   deploy:
     name: Deploy to VPS
@@ -54,18 +65,28 @@ jobs:
 
       - name: Write .env file
         run: |
-          cat > .env << EOF
-          NODE_ENV=production
+          cat > .env << 'EOF'
           PORT=${{ secrets.PORT }}
-          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          NODE_ENV=production
+          MONGODB_URI=${{ secrets.MONGODB_URI }}
           JWT_SECRET=${{ secrets.JWT_SECRET }}
+          JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}
+          UPI_VPA=${{ secrets.UPI_VPA }}
+          UPI_MERCHANT_NAME=${{ secrets.UPI_MERCHANT_NAME }}
+          UPI_CURRENCY=${{ secrets.UPI_CURRENCY }}
+          SMTP_HOST=${{ secrets.SMTP_HOST }}
+          SMTP_PORT=${{ secrets.SMTP_PORT }}
+          SMTP_USER=${{ secrets.SMTP_USER }}
+          SMTP_PASS=${{ secrets.SMTP_PASS }}
+          SMTP_FROM=${{ secrets.SMTP_FROM }}
+          ADMIN_KEY=${{ secrets.ADMIN_KEY }}
           EOF
 
       - name: Reload with PM2
         run: |
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          pm2 reload esummit-backend || pm2 start src/server.js --name "esummit-backend"
+          pm2 reload esummit-backend || pm2 start src/app.js --name "esummit-backend"
           pm2 save
 
       - name: Verify
