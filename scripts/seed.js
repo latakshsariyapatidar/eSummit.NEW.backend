@@ -336,9 +336,9 @@ const data = {
         'name': 'Rajat Gupta',
         'role': 'Overall Coordinator',
         'team': 'Core Committee',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'email': 'rajatgupta270806@gmail.com',
         'bio': 'Directing the overall execution and strategic partnerships of E-Summit 2026.',
-        'image': 'https://ui-avatars.com/api/?name=Rajat+Gupta&background=0D0D0C&color=fff',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802713/RAJAT_GUPTA_dk4qqy.jpg',
       },
       'crew': [],
     },
@@ -358,9 +358,9 @@ const data = {
         'name': 'L Shreya',
         'role': 'Outreach Head',
         'team': 'Core Committee',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'email': 'shrejwal2005@gmail.com',
         'bio': 'Driving institutional partnerships, external relations, and marketing campaigns.',
-        'image': 'https://ui-avatars.com/api/?name=L+Shreya&background=0D0D0C&color=fff',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802716/Shreya_L_ogvn2z.png',
       },
       'crew': [],
     },
@@ -369,9 +369,9 @@ const data = {
         'name': 'Soumya Basuli',
         'role': 'Design Lead',
         'team': 'Core Committee',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'email': 'ce24bt023@iitdh.ac.in',
         'bio': "Curating E-Summit 2026's visual identity, graphic design assets, and event style guide.",
-        'image': 'https://ui-avatars.com/api/?name=Soumya+Basuli&background=0D0D0C&color=fff',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802654/Soumya_Basuli_uqywud.jpg',
       },
       'crew': [],
     },
@@ -380,9 +380,9 @@ const data = {
         'name': 'Nirav Mittal',
         'role': 'Events Coordinator',
         'team': 'Core Committee',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'email': 'me24bt001@iitdh.ac.in',
         'bio': 'Managing event timelines, judging rubrics, and scheduling across all competition grids.',
-        'image': 'https://ui-avatars.com/api/?name=Nirav+Mittal&background=0D0D0C&color=fff',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802657/Nirav_Mittal_hdloqb.jpg',
       },
       'crew': [],
     },
@@ -391,9 +391,9 @@ const data = {
         'name': 'Mayank Mishra',
         'role': 'PR Lead',
         'team': 'Core Committee',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'email': 'is24bm002@iitdh.ac.in',
         'bio': 'Handling public relations, media reach, speaker coordination, and press releases.',
-        'image': 'https://ui-avatars.com/api/?name=Mayank+Mishra&background=0D0D0C&color=fff',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802713/Mayank_Mishra_fm7mmv.jpg',
       },
       'crew': [],
     },
@@ -402,22 +402,22 @@ const data = {
         'name': 'Lataksh Sariya',
         'role': 'Web Team Lead',
         'team': 'Core Committee',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'email': 'latakshsariya146@gmail.com',
         'bio': 'Architecting the digital interfaces, transitions, and user experiences for E-Summit 2026.',
-        'image': 'https://ui-avatars.com/api/?name=Lataksh+Sariya&background=0D0D0C&color=fff',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782803291/lataksh_wydrjz.jpg',
       },
       'crew': [
         {
           'name': 'Aaditya Kumar',
-          'image': 'https://ui-avatars.com/api/?name=Aaditya+Kumar&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802716/Aaditya_Kumar_hd1a9z.webp',
         },
         {
-          'name': 'Anju',
-          'image': 'https://ui-avatars.com/api/?name=Anju&background=0D0D0C&color=fff',
+          'name': 'ANJU FARSWAN',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802716/ANJU_FARSWAN_es8syh.jpg',
         },
         {
           'name': 'Ashutosh Tiwari',
-          'image': 'https://ui-avatars.com/api/?name=Ashutosh+Tiwari&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802730/Ashutosh_Tiwari_a8gglp.png',
         },
         {
           'name': 'Jayesh',
@@ -428,8 +428,8 @@ const data = {
           'image': 'https://ui-avatars.com/api/?name=Krish+Gupta&background=0D0D0C&color=fff',
         },
         {
-          'name': 'Lakshman',
-          'image': 'https://ui-avatars.com/api/?name=Lakshman&background=0D0D0C&color=fff',
+          'name': 'Lakshman Naidu Bandela',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802716/Lakshman_Naidu_Bandela_mcuddd.png',
         },
       ],
     },
@@ -441,13 +441,13 @@ const data = {
         'name': 'Navajeevan K S',
         'role': 'Event Lead',
         'bio': 'Leading execution of the flagship Innovex startup pitch stage.',
-        'image': 'https://ui-avatars.com/api/?name=Navajeevan+K+S&background=0D0D0C&color=fff',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802713/Navajeevan_yhweew.jpg',
+        'email': 'ec24bt022@iitdh.ac.in',
       },
       'crew': [
         {
           'name': 'Tejas Sharma',
-          'image': 'https://ui-avatars.com/api/?name=Tejas+Sharma&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802720/Tejas_Sharma01_cno1qf.jpg',
         },
         {
           'name': 'Saikat Ghosh',
@@ -462,16 +462,16 @@ const data = {
     {
       'lead': {
         'event': 'Find The Bug',
-        'name': 'SAI RAM',
+        'name': 'Sai Ram Areti',
         'role': 'Event Lead',
         'bio': 'Orchestrating the code debugging and code reviews tracking challenge.',
-        'image': 'https://ui-avatars.com/api/?name=SAI+RAM&background=0D0D0C&color=fff',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802717/Sai_Ram_ymtxsm.jpg',
+        'email': 'me24bt013@iitdh.ac.in',
       },
       'crew': [
         {
           'name': 'Hithesh V R',
-          'image': 'https://ui-avatars.com/api/?name=Hithesh+V+R&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802713/hithesh_vr_drrupj.jpg',
         },
         {
           'name': 'Aditya Jain',
@@ -479,59 +479,59 @@ const data = {
         },
         {
           'name': 'Chaitanya Handore',
-          'image': 'https://ui-avatars.com/api/?name=Chaitanya+Handore&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802654/Chaitanya_Handore_qisqbz.jpg',
         },
         {
           'name': 'Aaditya Kumar',
-          'image': 'https://ui-avatars.com/api/?name=Aaditya+Kumar&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802716/Aaditya_Kumar_hd1a9z.webp',
         },
       ],
     },
     {
       'lead': {
         'event': 'Bid-A-Biz',
-        'name': 'Pranav S Newton',
+        'name': 'Pranav Subash Newton',
         'role': 'Event Lead',
         'bio': 'Leading the business strategy bid and auction simulation.',
-        'image': 'https://ui-avatars.com/api/?name=Pranav+S+Newton&background=0D0D0C&color=fff',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802716/Pranav_S_uvcazd.jpg',
+        'email': 'pranav.csk7@gmail.com',
       },
       'crew': [
         {
           'name': 'Rahul Ahirwar',
-          'image': 'https://ui-avatars.com/api/?name=Rahul+Ahirwar&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802715/Rahul_ipmr6z.jpg',
         },
         {
           'name': 'Shivam Srivastava',
-          'image': 'https://ui-avatars.com/api/?name=Shivam+Srivastava&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802654/Shivam_Srivastava_uvcubd.jpg',
         },
         {
-          'name': 'Aadhi',
-          'image': 'https://ui-avatars.com/api/?name=Aadhi&background=0D0D0C&color=fff',
+          'name': 'Aadhi Shankar',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802656/Aadhi_Shankar_R_S_jvb0ef.jpg',
         },
         {
           'name': 'Sameer Patel',
-          'image': 'https://ui-avatars.com/api/?name=Sameer+Patel&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802715/Sameer_Patel_besyy6.jpg',
         },
       ],
     },
     {
       'lead': {
         'event': 'Technostrophe',
-        'name': 'Pranav',
+        'name': 'Pranav Subash Newton',
         'role': 'Event Lead',
         'bio': 'Running the technology quiz event and adrenaline-filled buzzer finals.',
-        'image': 'https://ui-avatars.com/api/?name=Pranav&background=0D0D0C&color=fff',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802716/Pranav_S_uvcazd.jpg',
+        'email': 'pranav.csk7@gmail.com',
       },
       'crew': [
         {
           'name': 'Achinthya',
-          'image': 'https://ui-avatars.com/api/?name=Achinthya&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802712/Achinthya_das_loggjc.jpg',
         },
         {
           'name': 'Shubhra Kishor Nikam',
-          'image': 'https://ui-avatars.com/api/?name=Shubhra+Kishor+Nikam&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802714/Nikam_Shubhra_Kishor_skchqf.jpg',
         },
         {
           'name': 'Lakshya Kumar',
@@ -545,13 +545,13 @@ const data = {
         'name': 'Anushaa B',
         'role': 'Event Lead',
         'bio': 'Leading the business strategy pitches and boardroom simulation battles.',
-        'image': 'https://ui-avatars.com/api/?name=Anushaa+B&background=0D0D0C&color=fff',
-        'email': 'outreach.iic@iitdh.ac.in',
+        'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802654/Anushaa_B_xphsgv.jpg',
+        'email': 'cs24bt032@iitdh.ac.in',
       },
       'crew': [
         {
           'name': 'Priyanshu Nimbalkar',
-          'image': 'https://ui-avatars.com/api/?name=Priyanshu+Nimbalkar&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802689/Nimbalkar_Priyanshu_Dnyanraj_vwzxyv.jpg',
         },
         {
           'name': 'Gourav Sherikar',
@@ -559,11 +559,11 @@ const data = {
         },
         {
           'name': 'Saisha Nimbalkar',
-          'image': 'https://ui-avatars.com/api/?name=Saisha+Nimbalkar&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802712/Nimbalkar_Saisha_Umesh_pjufx1.jpg',
         },
         {
           'name': 'Lakshman Naidu Bandela',
-          'image': 'https://ui-avatars.com/api/?name=Lakshman+Naidu+Bandela&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802716/Lakshman_Naidu_Bandela_mcuddd.png',
         },
       ],
     },
@@ -579,11 +579,11 @@ const data = {
       'crew': [
         {
           'name': 'Anjali Kumari',
-          'image': 'https://ui-avatars.com/api/?name=Anjali+Kumari&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802713/Anjali_Kumari_oegnhs.jpg',
         },
         {
           'name': 'Aditi Upadhye',
-          'image': 'https://ui-avatars.com/api/?name=Aditi+Upadhye&background=0D0D0C&color=fff',
+          'image': 'https://res.cloudinary.com/db69ffwwa/image/upload/v1782802718/Upadhye_Aditi_m0sewv.jpg',
         },
         {
           'name': 'Tangirala Dhanunjaya Rao',
