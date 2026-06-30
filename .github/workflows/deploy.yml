@@ -1,0 +1,74 @@
+name: CI/CD — E-Summit 2026 Backend
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Install & Test
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Load NVM + verify Node
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          echo "Node: $(node -v) | NPM: $(npm -v)"
+
+      - name: Install dependencies
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          npm ci
+
+      - name: Run tests
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          npm test
+        env:
+          NODE_ENV: test
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  deploy:
+    name: Deploy to VPS
+    runs-on: self-hosted
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install production dependencies
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          npm ci --production
+
+      - name: Write .env file
+        run: |
+          cat > .env << EOF
+          NODE_ENV=production
+          PORT=${{ secrets.PORT }}
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          EOF
+
+      - name: Reload with PM2
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          pm2 reload esummit-backend || pm2 start src/server.js --name "esummit-backend"
+          pm2 save
+
+      - name: Verify
+        run: |
+          sleep 3
+          pm2 status esummit-backend

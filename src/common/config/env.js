@@ -17,7 +17,9 @@
  *   - SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM
  */
 
+require('dotenv').config();
 const { z } = require('zod');
+
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(5000),

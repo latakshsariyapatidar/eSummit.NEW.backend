@@ -14,25 +14,30 @@
  */
 
 const express = require('express');
-const router = express.Router();
+const authRouter = express.Router();
+const adminRouter = express.Router();
 const authController = require('./auth.controller');
-const { verifyAdminKey } = require('./auth.middleware');
+const { verifyAdminKey, protect } = require('./auth.middleware');
+const { authLimiter } = require('../../common/middleware/rateLimiter');
 
-// TODO: 1. Setup public endpoints:
-// - POST /verify-key -> verifyKey handler (Admin login)
-router.post('/verify-key', authController.verifyKey);
+// --- Auth Router Endpoints (/api/auth) ---
+// Key verification/login protected by rate limiter
+authRouter.post('/verify-key', authLimiter, authController.verifyKey);
+authRouter.post('/logout', authController.logoutHandler);
+authRouter.get('/me', protect, authController.getMeHandler);
 
-// TODO: 2. Setup protected administrative endpoints (using verifyAdminKey middleware):
-// - GET /db-state -> getDbState handler
-// - POST /order/verify -> verifyOrder handler
-// - GET /payment-screenshot/:filename -> getPaymentScreenshot handler
-// - GET /passes -> getPasses handler
-// - POST /passes/update -> updatePasses handler
+// --- Admin Router Endpoints (/api/admin) ---
+// All administrative endpoints require valid X-Admin-Key
+adminRouter.post('/keys', verifyAdminKey, authController.createKeyHandler);
+adminRouter.get('/keys', verifyAdminKey, authController.listKeysHandler);
+adminRouter.delete('/keys/:id', verifyAdminKey, authController.deleteKeyHandler);
+adminRouter.get('/db-state', verifyAdminKey, authController.getDbState);
+adminRouter.post('/order/verify', verifyAdminKey, authController.verifyOrder);
+adminRouter.get('/passes', verifyAdminKey, authController.getPasses);
+adminRouter.post('/passes/update', verifyAdminKey, authController.updatePasses);
 
-router.get('/db-state', verifyAdminKey, authController.getDbState);
-router.post('/order/verify', verifyAdminKey, authController.verifyOrder);
-router.get('/payment-screenshot/:filename', verifyAdminKey, authController.getPaymentScreenshot);
-router.get('/passes', verifyAdminKey, authController.getPasses);
-router.post('/passes/update', verifyAdminKey, authController.updatePasses);
+module.exports = {
+  authRouter,
+  adminRouter,
+};
 
-module.exports = router;
