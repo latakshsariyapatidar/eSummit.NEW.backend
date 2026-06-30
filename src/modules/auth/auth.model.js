@@ -12,10 +12,37 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { getNextSequenceValue } = require('../../common/models/counter.model');
 
 const UserSchema = new Schema({
-  // TODO: Implement fields: ID (Number, unique), Email (String, unique, required), Phone (String, required), Name (String, required), Gender (String, enum: ['male', 'female', 'other'], required)
-  // Ensure timestamps are enabled (CreatedAt, UpdatedAt mapping)
+  ID: {
+    type: Number,
+    unique: true,
+  },
+  key: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true,
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'volunteer'],
+    default: 'volunteer',
+  },
+}, {
+  timestamps: true,
+});
+
+UserSchema.pre('save', async function() {
+  if (this.isNew && !this.ID) {
+    try {
+      this.ID = await getNextSequenceValue('User');
+    } catch (err) {
+      throw err;
+    }
+  }
 });
 
 module.exports = mongoose.model('User', UserSchema);
+

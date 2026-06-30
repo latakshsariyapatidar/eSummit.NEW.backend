@@ -18,10 +18,7 @@ const PassAvailabilitySchema = new Schema({
   SoldOut: { type: Boolean, default: false },
   Available: { type: Boolean, default: true },
 }, {
-  timestamps: {
-    createdAt: false,
-    updatedAt: 'UpdatedAt',
-  },
+  timestamps: true,
 });
 
 module.exports = mongoose.model('PassAvailability', PassAvailabilitySchema);

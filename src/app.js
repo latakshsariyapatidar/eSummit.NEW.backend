@@ -34,7 +34,7 @@ const rateLimiter = require('./common/middleware/rateLimiter');
 const requestLogger = require('./common/middleware/requestLogger');
 
 // Import module routers
-const authRouter = require('./modules/auth/auth.routes');
+const { authRouter, adminRouter } = require('./modules/auth/auth.routes');
 const ordersRouter = require('./modules/orders/orders.routes');
 const passesRouter = require('./modules/passes/passes.routes');
 const paymentsRouter = require('./modules/payments/payments.routes');
@@ -86,7 +86,8 @@ app.use(requestLogger);
 // - /api/admin      -> authRouter (Admin Key Verify, DB State, Verify Order, Screenshot, passes config)
 // - /api/order      -> ordersRouter (Submit Order, Order Status)
 // - /api/attendance -> checkinRouter (Verify QR, Mark Attendance)
-app.use('/api/admin', authRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/admin', adminRouter);
 app.use('/api/order', ordersRouter);
 app.use('/api/attendance', checkinRouter);
 app.use('/api/content', contentRouter);
