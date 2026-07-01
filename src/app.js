@@ -37,13 +37,11 @@ const requestLogger = require('./common/middleware/requestLogger');
 const { authRouter, adminRouter } = require('./modules/auth/auth.routes');
 const ordersRouter = require('./modules/orders/orders.routes');
 const passesRouter = require('./modules/passes/passes.routes');
-const paymentsRouter = require('./modules/payments/payments.routes');
 const checkinRouter = require('./modules/checkin/checkin.routes');
 const contentRouter = require('./modules/content/content.routes');
 
 const app = express();
 
-// Custom MongoDB Injection Sanitizer compatible with Express 5
 const mongoSanitize = (req, res, next) => {
   const sanitizeObject = (obj) => {
     if (obj && typeof obj === 'object') {
@@ -66,7 +64,7 @@ const mongoSanitize = (req, res, next) => {
 // Setup global middleware stubs
 app.use(helmet());
 app.use(cors({
-  origin: '*', // TODO: Configure Access-Control-Allow-Origin according to CORS requirements
+  origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'X-Admin-Key'],
 }));
@@ -79,13 +77,7 @@ app.use(mongoSanitize);
 
 // TODO: 1. Setup rate limiting and request logger middleware:
 app.use(requestLogger);
-// app.use('/admin', authLimiter);
-// app.use('/order', paymentLimiter);
 
-// TODO: 2. Mount API Routes conforming to endpoints specification:
-// - /admin      -> authRouter (Admin Key Verify, DB State, Verify Order, Screenshot, passes config)
-// - /order      -> ordersRouter (Submit Order, Order Status)
-// - /attendance -> checkinRouter (Verify QR, Mark Attendance)
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/order', ordersRouter);
@@ -99,14 +91,15 @@ app.get('/health', (req, res) => {
   });
 });
 
-// TODO: 3. Handle undefined routes (throw a standard 404 API error)
+
+// Handle undefined routes (throw a standard 404 API error)
 app.use((req, res, next) => {
   const err = new Error('Endpoint not found');
   err.statusCode = 404;
   next(err);
 });
 
-// TODO: 4. Mount global errorHandler middleware as the final middleware
+// Mount global errorHandler middleware as the final middleware
 app.use(errorHandler);
 
 module.exports = app;

@@ -27,7 +27,6 @@
 
 const Order = require('./orders.model');
 const passesService = require('../passes/passes.service');
-const paymentsService = require('../payments/payments.service');
 const notificationsService = require('../notifications/notifications.service');
 const logger = require('../../common/lib/logger');
 
