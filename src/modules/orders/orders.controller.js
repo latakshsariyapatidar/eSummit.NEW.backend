@@ -84,10 +84,11 @@ const approveOrder = asyncHandler(async (req, res) => {
     adminId: req.user.id,
   });
 
+  console.log("======== Got The results, inserting into the notifications queue =============");
+
   await Notification.insertMany(
     result.passes.map((pass) => ({
       type: "PASS_VERIFIED",
-
       payload: {
         email: pass.attendeeEmail,
         attendeeName: pass.attendeeName,

@@ -19,29 +19,27 @@ dotenv.config();
 const app = require("./app");
 const env = require("./common/config/env");
 const connectDB = require("./common/config/db");
-const {transporter} = require("./modules/notifications/providers/email.provider");
 const logger = require("./common/lib/logger");
+const {
+  initEmailProvider,
+} = require("./modules/notifications/providers/email.provider");
 
-connectDB();
-
-async function verifySMTP() {
+async function startServer() {
   try {
-    await transporter.verify();
-    console.log("SMTP Connected");
+    await connectDB();
+    await initEmailProvider();
+
+    // Start your notification worker AFTER SMTP is ready
+    require("./workers/notification.worker");
+
+    // Connect DB, app.listen(), etc.
+    app.listen(process.env.PORT, () => {
+      console.log(`Server running on ${process.env.PORT}`);
+    });
   } catch (err) {
-    console.error(err);
+    console.error("Failed to start server:", err);
+    process.exit(1);
   }
 }
 
-verifySMTP();
-
-require("./workers/notification.worker");
-
-app.listen(env.PORT, () => {
-  console.log("Server is running on port " + env.PORT);
-});
-
-// TODO: 1. Initialize database connection via connectDB()
-// TODO: 2. Bind application port and start listening (server.listen(PORT, ...))
-// TODO: 3. Setup listeners for uncaughtException and unhandledRejection
-// TODO: 4. Implement graceful shutdown handlers for SIGTERM/SIGINT signals
+startServer();

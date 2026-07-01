@@ -1,8 +1,8 @@
 const cron = require("node-cron");
 const notificationService = require("../modules/notifications/notifications.service");
 
-// Every 15 seconds
-cron.schedule("*/15 * * * * *", async () => {
+// Every 5 seconds
+cron.schedule("*/5 * * * * *", async () => {
   console.log("[Notification Worker] Checking pending notifications...");
 
   try {

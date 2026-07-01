@@ -3,80 +3,199 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+
     <title>Booking Rejected</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #f1f5f9;
+        color: #334155;
+        font-family: "Manrope", Arial, sans-serif;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .header {
+        background: #dc2626;
+        padding: 24px 32px;
+        text-align: center;
+      }
+
+      .header h1 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      .content {
+        padding: 32px;
+        color: #334155;
+      }
+
+      .section {
+        margin-bottom: 32px;
+      }
+
+      .section:last-child {
+        margin-bottom: 0;
+      }
+
+      .section h2 {
+        margin: 0 0 12px;
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      .section h3 {
+        margin: 0 0 12px;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .section p {
+        margin: 0;
+        line-height: 1.7;
+        font-size: 16px;
+      }
+
+      .rejection-box {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 20px;
+      }
+
+      .rejection-box h3 {
+        color: #b91c1c;
+      }
+
+      .rejection-box p {
+        color: #991b1b;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .steps-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 20px;
+      }
+
+      .steps-box ul {
+        margin: 0;
+        padding-left: 20px;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .steps-box li {
+        margin-bottom: 8px;
+      }
+
+      .closing-text {
+        color: #64748b;
+        font-size: 14px !important;
+        line-height: 1.7;
+      }
+
+      .footer {
+        border-top: 1px solid #e2e8f0;
+        background: #f8fafc;
+        padding: 20px 24px;
+        text-align: center;
+        font-size: 12px;
+        color: #64748b;
+        line-height: 1.6;
+      }
+
+      @media only screen and (max-width: 600px) {
+        body {
+          padding: 12px;
+        }
+
+        .content {
+          padding: 24px;
+        }
+
+        .header {
+          padding: 20px 24px;
+        }
+
+        .header h1 {
+          font-size: 28px;
+        }
+
+        .section h2 {
+          font-size: 22px;
+        }
+      }
+    </style>
   </head>
 
-  <body
-    class="m-0 bg-slate-100 p-6 text-slate-700"
-    style="font-family: 'Manrope', Arial, sans-serif"
-  >
-    <!-- Container -->
-    <div
-      class="mx-auto max-w-[600px] overflow-hidden rounded-xl border border-slate-200 bg-white"
-    >
+  <body>
+    <div class="container">
       <!-- Header -->
-      <div class="bg-red-600 px-8 py-6 text-center">
-        <h1 class="m-0 text-2xl font-bold text-white">
-          E-SUMMIT '26
-        </h1>
+      <div class="header">
+        <h1>E-SUMMIT '26</h1>
       </div>
 
       <!-- Body -->
-      <div class="space-y-8 p-8 text-slate-700">
-
+      <div class="content">
         <!-- Greeting -->
-        <section>
-          <h2 class="mb-3 text-xl font-semibold">
-            Hello {{buyerName}},
-          </h2>
+        <div class="section">
+          <h2>Hello {{buyerName}},</h2>
 
-          <p class="leading-7">
-            Unfortunately, we were unable to verify your payment, and your booking request has been rejected.
+          <p>
+            Unfortunately, we were unable to verify your payment, and your
+            booking request has been rejected.
           </p>
-        </section>
+        </div>
 
         <!-- Rejection Reason -->
-        <section class="rounded-lg border border-red-200 bg-red-50 p-5">
-          <h3 class="mb-3 text-lg font-semibold text-red-700">
-            Reason for Rejection
-          </h3>
+        <div class="section rejection-box">
+          <h3>Reason for Rejection</h3>
 
-          <p class="text-sm leading-6 text-red-800">
-            {{rejectionReason}}
-          </p>
-        </section>
+          <p>{{rejectionReason}}</p>
+        </div>
 
         <!-- Next Steps -->
-        <section class="rounded-lg border border-slate-200 bg-slate-50 p-5">
-          <h3 class="mb-3 text-lg font-semibold">
-            What You Can Do
-          </h3>
+        <div class="section steps-box">
+          <h3>What You Can Do</h3>
 
-          <ul class="list-disc space-y-2 pl-5 text-sm leading-6">
+          <ul>
             <li>Review the rejection reason above.</li>
             <li>Submit a new booking with the correct payment details.</li>
-            <li>Ensure the uploaded UTR are accurate.</li>
+            <li>Ensure the uploaded UTR is accurate.</li>
           </ul>
-        </section>
+        </div>
 
         <!-- Closing -->
-        <section>
-          <p class="text-sm leading-6 text-slate-600">
-            If you believe this rejection was made in error, please contact the E-Summit support team with your payment details for further assistance.
+        <div class="section">
+          <p class="closing-text">
+            If you believe this rejection was made in error, please contact the
+            E-Summit support team with your payment details for further
+            assistance.
           </p>
-        </section>
-
+        </div>
       </div>
 
       <!-- Footer -->
-      <div
-        class="border-t border-slate-200 bg-slate-50 px-6 py-5 text-center text-xs text-slate-500"
-      >
+      <div class="footer">
         © 2026 E-Summit IIT Dharwad<br />
         This is an automated email. Please do not reply.
       </div>
