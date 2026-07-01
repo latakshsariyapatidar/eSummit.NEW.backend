@@ -16,7 +16,6 @@
  *    - /orders     -> orders.routes
  *    - /passes     -> passes.routes
  *    - /payments   -> payments.routes
- *    - /checkin    -> checkin.routes
  *    - /content    -> content.routes
  * 4. Handling 404/Not Found requests.
  * 5. Registering the global error handler middleware.
@@ -36,7 +35,6 @@ const authRouter  = require('./modules/auth/auth.routes');
 const adminRouter = require('./modules/admin/admin.route');
 const ordersRouter = require('./modules/orders/orders.routes');
 const passesRouter = require('./modules/passes/pass.routes');
-const checkinRouter = require('./modules/checkin/checkin.routes');
 const contentRouter = require('./modules/content/content.routes');
 
 const app = express();
@@ -79,7 +77,6 @@ app.use(requestLogger);
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/orders', ordersRouter);
-app.use('/api/attendance', checkinRouter);
 app.use('/api/content', contentRouter);
 app.use('/api/passes', passesRouter);
 

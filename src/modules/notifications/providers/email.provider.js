@@ -15,12 +15,44 @@ const nodemailer = require('nodemailer');
 const env = require('../../../common/config/env');
 const logger = require('../../../common/lib/logger');
 
-const sendMail = async ({ to, subject, html, attachments }) => {
-  // TODO: Setup nodemailer transporter using env variables (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS)
-  // - Send email using SMTP settings (from SMTP_FROM)
-  // - Support attachments for QR code images/tickets
-  logger.info(`[Email Mock] Sending to: ${to}, Subject: ${subject}`);
-  return { messageId: 'mock-id' };
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: process.env.EMAIL_USER,
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    refreshToken: process.env.REFRESH_TOKEN,
+  },
+});
+
+// Verify the connection configuration
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('Error connecting to email server:', error);
+  } else {
+    console.log('Email server is ready to send messages');
+  }
+});
+
+
+
+// Function to send email
+const SendMail = async (to, subject, text, html) => {
+  try {
+    const info = await transporter.sendMail({
+      from: `"Your Name" <${process.env.EMAIL_USER}>`, // sender address
+      to, // list of receivers
+      subject, // Subject line
+      text, // plain text body
+      html, // html body
+    });
+
+    console.log('Message sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
 };
 
-module.exports = { sendMail };
+module.exports = {transporter, SendMail};
