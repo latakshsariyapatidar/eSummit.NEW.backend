@@ -16,14 +16,14 @@ const env = require('../../../common/config/env');
 const logger = require('../../../common/lib/logger');
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    type: 'OAuth2',
-    user: process.env.EMAIL_USER,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    refreshToken: process.env.REFRESH_TOKEN,
-  },
+  host: process.env.SMTP_HOST,
+
+  port: Number(process.env.SMTP_PORT),
+  secure: false,
+  auth:{
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
 });
 
 // Verify the connection configuration
@@ -36,23 +36,4 @@ transporter.verify((error, success) => {
 });
 
 
-
-// Function to send email
-const SendMail = async (to, subject, text, html) => {
-  try {
-    const info = await transporter.sendMail({
-      from: `"Your Name" <${process.env.EMAIL_USER}>`, // sender address
-      to, // list of receivers
-      subject, // Subject line
-      text, // plain text body
-      html, // html body
-    });
-
-    console.log('Message sent: %s', info.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-  } catch (error) {
-    console.error('Error sending email:', error);
-  }
-};
-
-module.exports = {transporter, SendMail};
+module.exports = {transporter};

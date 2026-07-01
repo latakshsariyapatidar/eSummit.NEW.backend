@@ -348,7 +348,7 @@ const approveOrder = async ({ orderId, adminId }) => {
 
         passDocuments.push({
           passId,
-          
+
           // Human-readable Order ID
           orderId: order.orderId,
 
@@ -417,9 +417,7 @@ const approveOrder = async ({ orderId, adminId }) => {
  */
 
 const rejectOrder = async ({ orderId, adminId, reason }) => {
-  const order = await Order.findOne({
-    orderId,
-  });
+  const order = await Order.findOne({ orderId });
 
   if (!order) {
     notFound("Order not found.");
@@ -430,11 +428,8 @@ const rejectOrder = async ({ orderId, adminId, reason }) => {
   }
 
   order.status = ORDER_STATUS.REJECTED;
-
   order.rejectedBy = adminId;
-
   order.rejectedReason = reason;
-
   order.rejectedAt = new Date();
 
   appendHistory(order, ORDER_STATUS.REJECTED, adminId);
@@ -443,8 +438,14 @@ const rejectOrder = async ({ orderId, adminId, reason }) => {
 
   return {
     orderId,
-
     status: order.status,
+    rejectedReason: order.rejectedReason,
+
+    notifications: order.passRequests.map((attendee) => ({
+      email: attendee.attendeeEmail,
+      buyerName: attendee.attendeeName,
+      rejectionReason: reason,
+    })),
   };
 };
 

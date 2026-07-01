@@ -1,14 +1,14 @@
-const asyncHandler = require('../../common/utils/asyncHandler');
-const apiResponse = require('../../common/utils/apiResponse');
-
-const orderService = require('./orders.service');
+const asyncHandler = require("../../common/utils/asyncHandler");
+const apiResponse = require("../../common/utils/apiResponse");
+const Notification = require("../notifications/notification.model");
+const orderService = require("./orders.service");
 
 const {
   submitOrderSchema,
   submitUTRSchema,
   approveOrderSchema,
   rejectOrderSchema,
-} = require('./orders.validation');
+} = require("./orders.validation");
 
 /**
  * ---------------------------------------------------------------------
@@ -21,12 +21,7 @@ const createOrder = asyncHandler(async (req, res) => {
 
   const result = await orderService.createOrder(payload);
 
-  return apiResponse.success(
-    res,
-    result,
-    'Order created successfully.',
-    201
-  );
+  return apiResponse.success(res, result, "Order created successfully.", 201);
 });
 
 /**
@@ -40,11 +35,7 @@ const submitUTR = asyncHandler(async (req, res) => {
 
   const result = await orderService.submitUTR(payload);
 
-  return apiResponse.success(
-    res,
-    result,
-    'Payment submitted successfully.'
-  );
+  return apiResponse.success(res, result, "Payment submitted successfully.");
 });
 
 /**
@@ -59,7 +50,7 @@ const getPendingOrders = asyncHandler(async (req, res) => {
   return apiResponse.success(
     res,
     orders,
-    'Pending orders fetched successfully.'
+    "Pending orders fetched successfully.",
   );
 });
 
@@ -74,11 +65,7 @@ const getOrderDetails = asyncHandler(async (req, res) => {
 
   const order = await orderService.getOrderDetails(orderId);
 
-  return apiResponse.success(
-    res,
-    order,
-    'Order fetched successfully.'
-  );
+  return apiResponse.success(res, order, "Order fetched successfully.");
 });
 
 /**
@@ -97,11 +84,21 @@ const approveOrder = asyncHandler(async (req, res) => {
     adminId: req.user.id,
   });
 
-  return apiResponse.success(
-    res,
-    result,
-    'Order approved successfully.'
+  await Notification.insertMany(
+    result.passes.map((pass) => ({
+      type: "PASS_VERIFIED",
+
+      payload: {
+        email: pass.attendeeEmail,
+        attendeeName: pass.attendeeName,
+        passId: pass.passId,
+        orderId: result.orderId,
+        qrBase64: pass.qr,
+      },
+    })),
   );
+
+  return apiResponse.success(res, result, "Order approved successfully.");
 });
 
 /**
@@ -121,11 +118,14 @@ const rejectOrder = asyncHandler(async (req, res) => {
     adminId: req.user.id,
   });
 
-  return apiResponse.success(
-    res,
-    result,
-    'Order rejected successfully.'
+  await Notification.insertMany(
+    result.notifications.map((notification) => ({
+      type: "ORDER_REJECTED",
+      payload: notification,
+    })),
   );
+
+  return apiResponse.success(res, result, "Order rejected successfully.");
 });
 
 module.exports = {

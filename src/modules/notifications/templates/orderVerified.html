@@ -1,117 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Tickets are Confirmed! - E-Summit '26</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0d0f12;
-      color: #e2e8f0;
-      margin: 0;
-      padding: 0;
-    }
-    .email-container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: #14171d;
-      border: 1px solid #1e293b;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .header {
-      background: linear-gradient(135deg, #10b981, #059669);
-      padding: 30px;
-      text-align: center;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: #ffffff;
-    }
-    .content {
-      padding: 40px 30px;
-      line-height: 1.6;
-    }
-    .content h2 {
-      color: #10b981;
-      font-size: 20px;
-      margin-top: 0;
-    }
-    .tickets-container {
-      margin: 20px 0;
-    }
-    .ticket-card {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      border: 1px solid #334155;
-    }
-    .ticket-header {
-      font-weight: bold;
-      color: #38bdf8;
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #334155;
-      padding-bottom: 8px;
-      margin-bottom: 10px;
-    }
-    .ticket-details {
-      font-size: 14px;
-    }
-    .ticket-id {
-      font-family: 'Courier New', Courier, monospace;
-      background: #0f172a;
-      padding: 4px 8px;
-      border-radius: 4px;
-      color: #f59e0b;
-      font-weight: bold;
-    }
-    .footer {
-      background: #090a0f;
-      padding: 20px;
-      text-align: center;
-      font-size: 12px;
-      color: #64748b;
-      border-top: 1px solid #1e293b;
-    }
-  </style>
-</head>
-<body>
-  <div class="email-container">
-    <div class="header">
-      <h1>TICKETS CONFIRMED</h1>
-    </div>
-    <div class="content">
-      <h2>Congratulations {{buyerName}}!</h2>
-      <p>Your payment for E-Summit '26 has been successfully verified! Below are your digital entry tickets. Please keep these safe as you will need the QR codes/Ticket IDs to check-in at the venue gates.</p>
-      
-      <div class="tickets-container">
-        {{#each tickets}}
-        <div class="ticket-card">
-          <div class="ticket-header">
-            <span>Attendee #{{index}}</span>
-            <span class="ticket-id">{{passId}}</span>
-          </div>
-          <div class="ticket-details">
-            <div><strong>Name:</strong> {{name}}</div>
-            <div><strong>Email:</strong> {{email}}</div>
-            <div><strong>Pass Tier:</strong> {{tier}}</div>
-          </div>
-        </div>
-        {{/each}}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>Booking Confirmed</title>
+  </head>
+
+  <body
+    class="m-0 bg-slate-100 p-6 text-slate-700"
+    style="font-family: &quot;Manrope&quot;, Arial, sans-serif"
+  >
+    <!-- Container -->
+    <div
+      class="mx-auto max-w-[600px] overflow-hidden rounded-xl border border-slate-200 bg-white"
+    >
+      <!-- Header -->
+      <div class="bg-orange-500 px-8 py-6 text-center">
+        <h1 class="m-0 text-2xl font-bold text-white">E-SUMMIT '26</h1>
       </div>
-      
-      <p>Looking forward to seeing you at IIT Roorkee! Get ready for an incredible entrepreneurial journey.</p>
+
+      <!-- Body -->
+      <div class="space-y-8 p-8 text-slate-700">
+        <!-- Greeting -->
+        <section>
+          <h2 class="mb-3 text-xl font-semibold">Hello {{buyerName}},</h2>
+
+          <p>
+            We have successfully confirmed your booking. Your reservation is now complete.
+          </p>
+        </section>
+
+
+        <!-- QR Section -->
+        <section class="rounded-lg border border-slate-200 p-6 text-center">
+          <h3 class="mb-2 text-lg font-semibold">Reservation QR</h3>
+
+          <p class="mb-6 text-sm text-slate-500">
+            Save this QR code for future reference.
+          </p>
+
+          <img
+            src="cid:qr-code"
+            alt="QR Code"
+            class="mx-auto h-[180px] w-[180px] rounded bg-white p-2"
+          />
+        </section>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="border-t border-slate-200 bg-slate-50 px-6 py-5 text-center text-xs text-slate-500"
+      >
+        © 2026 E-Summit IIT Dharwad<br />
+
+        This is an automated email. Please do not reply.
+      </div>
     </div>
-    <div class="footer">
-      &copy; 2026 E-Summit IIT Roorkee. All rights reserved.
-    </div>
-  </div>
-</body>
+  </body>
 </html>

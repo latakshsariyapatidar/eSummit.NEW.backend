@@ -1,48 +1,149 @@
-/**
- * Notifications Service - E-Summit '26
- * 
- * Dispatch manager coordinating email and SMS delivery.
- * Compiles specific HTML template bodies, interpolates client names, 
- * order IDs, and passes data, and forwards them to providers.
- * 
- * Core responsibilities:
- * - sendOrderConfirmation(order)
- *   - Compiles 'orderConfirmed.html' template.
- *   - Triggers emailProvider.sendMail() with details.
- *   - Optionally sends a brief transactional SMS.
- * - sendOrderVerificationSuccess(order, tickets)
- *   - Compiles 'orderVerified.html' template.
- *   - Attaches QR/pass information or PDF links.
- *   - Sends email confirmation.
- *   - Sends SMS containing ticket visual ID codes for entry context.
- * - sendOrderRejection(order, reason)
- *   - Compiles 'orderRejected.html' template using admin rejection reason comments.
- *   - Dispatches email alert.
- */
+const fs = require("fs/promises");
+const path = require("path");
+const Handlebars = require("handlebars");
 
-const fs = require('fs');
-const path = require('path');
-const emailProvider = require('./providers/email.provider');
-const logger = require('../../common/lib/logger');
+const Notification = require("./notification.model");
+const { transporter } = require("./providers/email.provider");
 
-const sendOrderConfirmation = async (order, buyerName, buyerEmail) => {
-  // TODO: Compile orderConfirmed.html template and dispatch confirmation email to buyer.
-};
+async function compileTemplate(templateName, data) {
+  const filePath = path.join(__dirname, "templates", `${templateName}.html`);
 
-const sendOrderVerificationSuccess = async (order, buyerName, buyerEmail, passes) => {
-  // TODO: Generate QR Code images (base64) for each pass
-  // - Compile orderVerified.html with passes details
-  // - Send email to buyer with passes and inline/attached QR Codes
-  // - Send individual emails to each attendee with their specific pass
-  // - Send transactional check-in instructions SMS to attendees
-};
+  const html = await fs.readFile(filePath, "utf8");
+  return Handlebars.compile(html)(data);
+}
 
-const sendOrderRejection = async (order, buyerName, buyerEmail, reason) => {
-  // TODO: Compile orderRejected.html with admin comments and dispatch to buyer.
-};
+async function sendEmail({
+  to,
+  from = process.env.SMTP_USER,
+  subject,
+  html,
+  text,
+  qrBase64,
+}) {
+  const mailOptions = {
+    from,
+    to,
+    subject,
+    html,
+    text,
+  };
+
+  if (qrBase64) {
+    // Remove "data:image/png;base64," prefix
+    const base64 = qrBase64.replace(/^data:image\/png;base64,/, "");
+
+    mailOptions.attachments = [
+      {
+        filename: "qr.png",
+        content: base64,
+        encoding: "base64",
+        cid: "qr-code",
+      },
+    ];
+  }
+
+  return transporter.sendMail(mailOptions);
+}
+
+async function sendPassVerifiedEmail({
+  email,
+  attendeeName,
+  passId,
+  orderId,
+  qrBase64,
+}) {
+  const html = await compileTemplate("orderVerified", {
+    buyerName: attendeeName,
+    passId,
+    orderId,
+  });
+
+  return sendEmail({
+    to: email,
+    subject: "Your E-Summit '26 Pass is Ready",
+    html,
+    qrBase64,
+  });
+}
+
+async function sendOrderRejectedEmail({ email, buyerName, rejectionReason }) {
+  const html = await compileTemplate("orderRejected", {
+    buyerName,
+    rejectionReason,
+  });
+
+  return sendEmail({
+    to: email,
+    subject: "Your E-Summit '26 Booking was Rejected",
+    html,
+  });
+}
+
+async function processPendingNotifications() {
+  while (true) {
+    const notification = await Notification.findOneAndUpdate(
+      {
+        status: "PENDING",
+      },
+      {
+        $set: {
+          status: "PROCESSING",
+        },
+      },
+      {
+        returnDocument: "after",
+        sort: {
+          createdAt: 1,
+        },
+      },
+    );
+
+    // Queue is empty
+    if (!notification) {
+      break;
+    }
+
+    try {
+      switch (notification.type) {
+        case "PASS_VERIFIED":
+          await sendPassVerifiedEmail(notification.payload);
+          break;
+
+        case "ORDER_REJECTED":
+          await sendOrderRejectedEmail(notification.payload);
+          break;
+
+        default:
+          throw new Error(`Unknown notification type: ${notification.type}`);
+      }
+
+      await Notification.findByIdAndUpdate(notification._id, {
+        status: "COMPLETED",
+        processedAt: new Date(),
+        lastError: null,
+      });
+
+      console.log(`Notification ${notification._id} processed successfully.`);
+    } catch (err) {
+      const attempts = notification.attempts + 1;
+
+      await Notification.findByIdAndUpdate(notification._id, {
+        attempts,
+        lastError: err.message,
+        status: attempts >= 5 ? "FAILED" : "PENDING",
+      });
+
+      console.error(
+        `Failed to process notification ${notification._id}:`,
+        err.message,
+      );
+    }
+  }
+}
 
 module.exports = {
-  sendOrderConfirmation,
-  sendOrderVerificationSuccess,
-  sendOrderRejection,
+  sendEmail,
+  sendPassVerifiedEmail,
+  sendOrderRejectedEmail,
+  processPendingNotifications,
 };
