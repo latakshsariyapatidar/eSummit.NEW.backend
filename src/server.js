@@ -26,8 +26,11 @@ const {
 
 async function startServer() {
   try {
+    console.log("Starting server...");
     await connectDB();
+    console.log("Database connected successfully.");
     await initEmailProvider();
+    console.log("Email provider initialized successfully.");
 
     // Start your notification worker AFTER SMTP is ready
     require("./workers/notification.worker");

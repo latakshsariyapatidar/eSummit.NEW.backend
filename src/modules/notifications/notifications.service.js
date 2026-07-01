@@ -83,11 +83,7 @@ async function sendPassVerifiedEmail({
   });
 }
 
-async function sendOrderRejectedEmail({
-  email,
-  buyerName,
-  rejectionReason,
-}) {
+async function sendOrderRejectedEmail({ email, buyerName, rejectionReason }) {
   const html = await compileTemplate("orderRejected", {
     buyerName,
     rejectionReason,
@@ -129,7 +125,7 @@ async function processPendingNotifications() {
           processingStartedAt: null,
           nextRetryAt: new Date(),
         },
-      }
+      },
     );
 
     for (let i = 0; i < MAX_BATCH_SIZE; i++) {
@@ -150,8 +146,8 @@ async function processPendingNotifications() {
           sort: {
             createdAt: 1,
           },
-          new: true,
-        }
+          returnDocument: "after",
+        },
       );
 
       if (!notification) {
@@ -159,16 +155,14 @@ async function processPendingNotifications() {
       }
 
       console.log(
-        `[Notification] Processing ${notification._id} (${notification.type})`
+        `[Notification] Processing ${notification._id} (${notification.type})`,
       );
 
       try {
         const handler = handlers[notification.type];
 
         if (!handler) {
-          throw new Error(
-            `Unknown notification type: ${notification.type}`
-          );
+          throw new Error(`Unknown notification type: ${notification.type}`);
         }
 
         await handler(notification.payload);
@@ -181,16 +175,12 @@ async function processPendingNotifications() {
           lastError: null,
         });
 
-        console.log(
-          `[Notification] Completed ${notification._id}`
-        );
+        console.log(`[Notification] Completed ${notification._id}`);
       } catch (err) {
         const attempts = notification.attempts + 1;
 
         const retryDelay =
-          RETRY_DELAYS[
-            Math.min(attempts - 1, RETRY_DELAYS.length - 1)
-          ];
+          RETRY_DELAYS[Math.min(attempts - 1, RETRY_DELAYS.length - 1)];
 
         await Notification.findByIdAndUpdate(notification._id, {
           attempts,
