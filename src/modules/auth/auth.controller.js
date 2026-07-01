@@ -71,111 +71,6 @@ const deleteKeyHandler = asyncHandler(async (req, res) => {
   return apiResponse.success(res, null, 'Key revoked successfully');
 });
 
-const getDbState = asyncHandler(async (req, res) => {
-  const Order = require('../orders/orders.model');
-  const users = await User.find({}).sort({ createdAt: -1 });
-  const orders = await Order.find({}).sort({ createdAt: -1 });
-  return apiResponse.success(res, { users, orders }, 'Database state retrieved successfully');
-});
-
-const verifyOrder = asyncHandler(async (req, res) => {
-  const Order = require('../orders/orders.model');
-  const Pass = require('../passes/passes.model');
-  const notificationsService = require('../notifications/notifications.service');
-
-  const orderId = req.body.order_id || req.body.id || req.body.ID;
-  const { status, reason } = req.body;
-
-  if (!orderId) {
-    return apiResponse.error(res, 'order_id is required', 400);
-  }
-  if (!status || !['verified', 'rejected'].includes(status)) {
-    return apiResponse.error(res, "status must be either 'verified' or 'rejected'", 400);
-  }
-
-  const order = await Order.findOne({ ID: orderId });
-  if (!order) {
-    return apiResponse.error(res, 'Order not found', 404);
-  }
-
-  // Update order status
-  order.Status = status;
-  await order.save();
-
-  // Find user associated with the order to retrieve buyer contact
-  const buyer = await User.findOne({ ID: order.UserID });
-  const buyerName = buyer ? (buyer.Name || 'Attendee') : 'Attendee';
-  const buyerEmail = buyer ? (buyer.Email || '') : '';
-
-  if (status === 'verified') {
-    // Retrieve passes associated with the order
-    const passes = await Pass.find({ OrderID: order.ID });
-    
-    // Trigger notification service
-    try {
-      await notificationsService.sendOrderVerificationSuccess(order, buyerName, buyerEmail, passes);
-    } catch (err) {
-      // Log notification dispatch failures but don't fail the verification transaction
-      console.error('Failed to send verification email:', err);
-    }
-  } else {
-    // Trigger rejection notification
-    try {
-      await notificationsService.sendOrderRejection(order, buyerName, buyerEmail, reason || 'Payment proof verification failed');
-    } catch (err) {
-      console.error('Failed to send rejection email:', err);
-    }
-  }
-
-  return apiResponse.success(res, order, `Order status updated to ${status} successfully`);
-});
-
-// const getPaymentScreenshot = asyncHandler(async (req, res) => {
-//   const { filename } = req.params;
-//   const filePath = path.join(process.cwd(), 'screenshots', filename);
-
-//   if (!fs.existsSync(filePath)) {
-//     return apiResponse.error(res, 'Screenshot file not found', 404);
-//   }
-
-//   return res.sendFile(filePath);
-// });
-
-const getPasses = asyncHandler(async (req, res) => {
-  const PassAvailability = require('../passes/passAvailability.model');
-  const passes = await PassAvailability.find({}).sort({ ID: 1 });
-  return apiResponse.success(res, passes, 'Pass configurations retrieved successfully');
-});
-
-const updatePasses = asyncHandler(async (req, res) => {
-  const PassAvailability = require('../passes/passAvailability.model');
-
-  // Handle single object update
-  if (req.body.ID !== undefined) {
-    const { ID, SoldOut, Available, Price } = req.body;
-    const updateData = {};
-    if (SoldOut !== undefined) {updateData.SoldOut = SoldOut;}
-    if (Available !== undefined) {updateData.Available = Available;}
-    if (Price !== undefined) {updateData.Price = Price;}
-
-    const pass = await PassAvailability.findOneAndUpdate({ ID }, updateData, { new: true, upsert: true });
-    return apiResponse.success(res, pass, 'Pass configuration updated successfully');
-  }
-
-  // Handle bulk array update
-  if (Array.isArray(req.body)) {
-    const results = [];
-    for (const item of req.body) {
-      if (item.ID !== undefined) {
-        const pass = await PassAvailability.findOneAndUpdate({ ID: item.ID }, item, { new: true, upsert: true });
-        results.push(pass);
-      }
-    }
-    return apiResponse.success(res, results, 'Pass configurations updated successfully');
-  }
-
-  return apiResponse.error(res, 'Invalid request payload structure', 400);
-});
 
 module.exports = {
   verifyKey,
@@ -184,9 +79,5 @@ module.exports = {
   createKeyHandler,
   listKeysHandler,
   deleteKeyHandler,
-  getDbState,
-  verifyOrder,
-  getPasses,
-  updatePasses,
 };
 

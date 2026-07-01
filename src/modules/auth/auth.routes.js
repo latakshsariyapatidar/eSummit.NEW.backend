@@ -31,10 +31,7 @@ authRouter.get('/me', protect, authController.getMeHandler);
 adminRouter.post('/keys', verifyAdminKey, authController.createKeyHandler);
 adminRouter.get('/keys', verifyAdminKey, authController.listKeysHandler);
 adminRouter.delete('/keys/:id', verifyAdminKey, authController.deleteKeyHandler);
-adminRouter.get('/db-state', verifyAdminKey, authController.getDbState);
-adminRouter.post('/order/verify', verifyAdminKey, authController.verifyOrder);
-adminRouter.get('/passes', verifyAdminKey, authController.getPasses);
-adminRouter.post('/passes/update', verifyAdminKey, authController.updatePasses);
+
 
 module.exports = {
   authRouter,

@@ -86,11 +86,11 @@ app.use(requestLogger);
 // - /admin      -> authRouter (Admin Key Verify, DB State, Verify Order, Screenshot, passes config)
 // - /order      -> ordersRouter (Submit Order, Order Status)
 // - /attendance -> checkinRouter (Verify QR, Mark Attendance)
-app.use('/auth', authRouter);
-app.use('/admin', adminRouter);
-app.use('/order', ordersRouter);
-app.use('/attendance', checkinRouter);
-app.use('/content', contentRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/order', ordersRouter);
+app.use('/api/attendance', checkinRouter);
+app.use('/api/content', contentRouter);
 
 app.get('/health', (req, res) => {
   res.status(200).json({

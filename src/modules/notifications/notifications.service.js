@@ -23,7 +23,6 @@
 const fs = require('fs');
 const path = require('path');
 const emailProvider = require('./providers/email.provider');
-const smsProvider = require('./providers/sms.provider');
 const logger = require('../../common/lib/logger');
 
 const sendOrderConfirmation = async (order, buyerName, buyerEmail) => {
