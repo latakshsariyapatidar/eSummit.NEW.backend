@@ -1,25 +1,86 @@
+const express = require("express");
+
+const orderController = require("./orders.controller");
+
+// Replace with your authentication middleware
+// const { authenticate, authorizeAdmin } = require('../../common/middleware/auth');
+
+const router = express.Router();
+const adminMiddleware = require("../admin/admin.middleware");
+const authMiddleware = require("../auth/auth.middleware");
+
 /**
- * Orders Routes - E-Summit '26
- * 
- * Defines routing endpoints for checking out tickets, managing attendees, and retrieving order details.
- * 
- * Endpoints to be defined:
- * - POST /api/orders/checkout         -> Create temporary order, reserve ticket, return payment info (UPI QR metadata).
- * - POST /api/orders/:id/payment      -> Submit transaction ID/UTR receipt screenshot to verify order.
- * - GET  /api/orders/:id/status       -> Check order status (pending, verified, rejected).
- * - GET  /api/orders/                 -> Admin list all orders (filtered by status, payment method, etc.).
- * - PATCH /api/orders/:id/verify      -> Admin manually confirm receipt of money, triggers ticket generation.
- * - PATCH /api/orders/:id/reject      -> Admin reject order due to bad screenshot or unpaid transaction.
+ * ---------------------------------------------------------------------
+ * Public Routes
+ * ---------------------------------------------------------------------
  */
 
-const express = require('express');
-const router = express.Router();
-const ordersController = require('./orders.controller');
-// TODO: Setup public booking routes:
-// - POST /submit -> submitOrder handler
-// - GET /status -> getOrderStatus handler
+/**
+ * Create a new order.
+ *
+ * POST /orders/submit
+ */
+router.post("/submit", orderController.createOrder);
 
-router.post('/submit', ordersController.submitOrder);
-router.get('/status', ordersController.getOrderStatus);
+/**
+ * Submit payment UTR.
+ *
+ * POST /orders/utr
+ */
+router.post("/utr", orderController.submitUTR);
+
+/**
+ * ---------------------------------------------------------------------
+ * Admin Routes
+ * ---------------------------------------------------------------------
+ */
+
+/**
+ * Get all payment submitted orders.
+ *
+ * GET /orders/admin/pending
+ */
+router.get(
+  "/admin/pending",
+  authMiddleware.protect,
+  adminMiddleware.verifyAdminKey,
+  orderController.getPendingOrders,
+);
+
+/**
+ * Get complete order details.
+ *
+ * GET /orders/admin/:orderId
+ */
+router.get(
+  "/admin/:orderId",
+  authMiddleware.protect,
+  adminMiddleware.verifyAdminKey,
+  orderController.getOrderDetails,
+);
+
+/**
+ * Approve an order.
+ *
+ * POST /orders/admin/:orderId/approve
+ */
+router.post(
+  "/admin/:orderId/approve",
+  authMiddleware.protect,
+  adminMiddleware.verifyAdminKey,
+  orderController.approveOrder,
+);
+
+/**
+ * Reject an order.
+ *
+ * POST /orders/admin/:orderId/reject
+ */
+router.post(
+  "/admin/:orderId/reject",
+  authMiddleware.protect,
+  adminMiddleware.verifyAdminKey,
+  orderController.rejectOrder,
+);
 
 module.exports = router;

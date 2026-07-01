@@ -28,6 +28,7 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),
   JWT_EXPIRES_IN: z.string().default('7d'),
   UPI_VPA: z.string().min(1, 'UPI_VPA is required'),
+  UPI_VPAS: z.string().optional(),
   UPI_MERCHANT_NAME: z.string().min(1, 'UPI_MERCHANT_NAME is required'),
   UPI_CURRENCY: z.string().default('INR'),
   SMTP_HOST: z.string().optional(),

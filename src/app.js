@@ -24,19 +24,18 @@
 
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 
 // Import common configuration and custom middlewares
-const env = require('./common/config/env');
 const errorHandler = require('./common/middleware/errorHandler');
 const rateLimiter = require('./common/middleware/rateLimiter');
 const requestLogger = require('./common/middleware/requestLogger');
 
 // Import module routers
-const { authRouter, adminRouter } = require('./modules/auth/auth.routes');
+const authRouter  = require('./modules/auth/auth.routes');
+const adminRouter = require('./modules/admin/admin.route');
 const ordersRouter = require('./modules/orders/orders.routes');
-const passesRouter = require('./modules/passes/passes.routes');
+const passesRouter = require('./modules/passes/pass.routes');
 const checkinRouter = require('./modules/checkin/checkin.routes');
 const contentRouter = require('./modules/content/content.routes');
 
@@ -62,7 +61,6 @@ const mongoSanitize = (req, res, next) => {
 };
 
 // Setup global middleware stubs
-app.use(helmet());
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
@@ -80,9 +78,10 @@ app.use(requestLogger);
 
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
-app.use('/api/order', ordersRouter);
+app.use('/api/orders', ordersRouter);
 app.use('/api/attendance', checkinRouter);
 app.use('/api/content', contentRouter);
+app.use('/api/passes', passesRouter);
 
 app.get('/health', (req, res) => {
   res.status(200).json({

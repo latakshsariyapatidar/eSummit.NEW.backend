@@ -17,7 +17,7 @@
  */
 
 const CheckIn = require('./checkin.model');
-const passesService = require('../passes/passes.service');
+const passesService = require('../passes/pass.service');
 const logger = require('../../common/lib/logger');
 
 // TODO: Define and export CheckinService class or functions.

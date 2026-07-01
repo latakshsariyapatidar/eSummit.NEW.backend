@@ -1,15 +1,3 @@
-/**
- * User Model - E-Summit '26
- * 
- * Fields to define:
- * - ID: Number (Unique, auto-increment integer ID)
- * - Email: String (Unique email, lowercase, indexed)
- * - Phone: String (10 digit phone number)
- * - Name: String (User's full name)
- * - Gender: String (Enum: ['male', 'female', 'other'])
- * - Timestamps: CreatedAt, UpdatedAt (ISO 8601 strings)
- */
-
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { getNextSequenceValue } = require('../../common/models/counter.model');
