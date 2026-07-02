@@ -124,6 +124,15 @@ const orderSchema = new mongoose.Schema(
     },
 
     /**
+     * UPI VPA used to generate this order's payment QR.
+     */
+    paymentUPI: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+
+    /**
      * Immutable purchase snapshot.
      */
     passRequests: {

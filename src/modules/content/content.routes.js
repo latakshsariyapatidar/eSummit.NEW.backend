@@ -21,8 +21,7 @@ router.get('/events', contentController.getEvents);
 router.get('/sponsors', contentController.getSponsors);
 router.get('/faqs', contentController.getFAQs);
 router.get('/schedule', contentController.getSchedules);
-router.get('/merch', contentController.getMerch);
 router.get('/teams', contentController.getTeams);
-router.get('/config/:key', contentController.getConfig);
+router.get('/passes', contentController.getPasses);
 
 module.exports = router;

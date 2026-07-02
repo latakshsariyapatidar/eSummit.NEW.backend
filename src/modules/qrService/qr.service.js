@@ -21,13 +21,19 @@ const env = require('../../common/config/env');
  * UPI_VPAS is expected as a comma-separated list in env, e.g.:
  *   UPI_VPAS=esummit1@okhdfcbank,esummit2@okicici,esummit3@oksbi
  *
- * Falls back to the single UPI_VPA if UPI_VPAS isn't set, so this doesn't
- * break your existing env.js until you add the new field.
+ * Falls back to UPI_VPA only when UPI_VPAS is not configured.
  */
-const UPI_VPAS = (env.UPI_VPAS || env.UPI_VPA || '')
-  .split(',')
-  .map((id) => id.trim())
-  .filter(Boolean);
+const parseVpas = (...values) => {
+  const vpas = values
+    .filter(Boolean)
+    .flatMap((value) => value.split(/[,\n;|]+/))
+    .map((id) => id.trim())
+    .filter(Boolean);
+
+  return [...new Set(vpas)];
+};
+
+const UPI_VPAS = parseVpas(env.UPI_VPAS || env.UPI_VPA);
 
 if (UPI_VPAS.length === 0) {
   throw new Error(
@@ -35,7 +41,13 @@ if (UPI_VPAS.length === 0) {
   );
 }
 
-const pickRandomVpa = () => UPI_VPAS[Math.floor(Math.random() * UPI_VPAS.length)];
+let nextVpaIndex = 0;
+
+const pickNextVpa = () => {
+  const vpa = UPI_VPAS[nextVpaIndex];
+  nextVpaIndex = (nextVpaIndex + 1) % UPI_VPAS.length;
+  return vpa;
+};
 
 const QR_RENDER_OPTIONS = {
   errorCorrectionLevel: 'M',
@@ -70,7 +82,7 @@ const badRequest = (message) => {
 
 /**
  * @param {{ cartPrice: number|string, orderId: string }} payload
- * @returns {Promise<{ orderId: string, qrBase64: string }>}
+ * @returns {Promise<{ orderId: string, qrBase64: string, vpa: string }>}
  */
 const generatePaymentQr = async ({ cartPrice, orderId }) => {
   const amount = Number(cartPrice);
@@ -82,7 +94,7 @@ const generatePaymentQr = async ({ cartPrice, orderId }) => {
     throw badRequest('orderId is required');
   }
 
-  const vpa = pickRandomVpa();
+  const vpa = pickNextVpa();
 
   const upiLink = buildUpiLink({
     vpa,

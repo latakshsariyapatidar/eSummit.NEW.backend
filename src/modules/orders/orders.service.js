@@ -115,10 +115,20 @@ const createOrder = async ({ cartValue, passes }) => {
 
   const orderId = await generateOrderId();
 
+  /**
+   * Generate Payment QR and retain the VPA encoded in it.
+   */
+  const { qrBase64, vpa } = await qrService.generatePaymentQr({
+    cartPrice: calculatedAmount,
+    orderId,
+  });
+
   const order = await Order.create({
     orderId,
 
     amount: calculatedAmount,
+
+    paymentUPI: vpa,
 
     status: ORDER_STATUS.PENDING,
 
@@ -134,17 +144,10 @@ const createOrder = async ({ cartValue, passes }) => {
     ],
   });
 
-  /**
-   * Generate Payment QR
-   */
-  const { qrBase64 } = await qrService.generatePaymentQr({
-    cartPrice: calculatedAmount,
-    orderId,
-  });
-
   return {
     orderId,
     qrBase64,
+    paymentUPI: order.paymentUPI,
   };
 };
 

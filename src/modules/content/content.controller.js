@@ -34,23 +34,14 @@ const getSchedules = asyncHandler(async (req, res) => {
   return apiResponse.success(res, schedules);
 });
 
-const getMerch = asyncHandler(async (req, res) => {
-  const merch = await contentService.getMerch();
-  return apiResponse.success(res, merch);
-});
-
 const getTeams = asyncHandler(async (req, res) => {
   const teams = await contentService.getTeams();
   return apiResponse.success(res, teams);
 });
 
-const getConfig = asyncHandler(async (req, res) => {
-  const { key } = req.params;
-  const config = await contentService.getConfig(key);
-  if (!config) {
-    return apiResponse.error(res, `Config key ${key} not found`, 404);
-  }
-  return apiResponse.success(res, config.value);
+const getPasses = asyncHandler(async (req, res) => {
+  const passes = await contentService.getPasses();
+  return apiResponse.success(res, passes);
 });
 
 module.exports = {
@@ -58,7 +49,6 @@ module.exports = {
   getSponsors,
   getFAQs,
   getSchedules,
-  getMerch,
   getTeams,
-  getConfig,
+  getPasses,
 };
