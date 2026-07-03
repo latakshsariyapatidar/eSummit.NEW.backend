@@ -11,7 +11,7 @@
  * - removeContent(id)        -> Deletes dynamic records.
  */
 
-const { Event, Sponsor, FAQ, Schedule, Merch, Config, Team, PassesCategorySchema} = require('./content.model');
+const { Event, Sponsor, FAQ, Schedule, Merch, Config, Team, PassesCategory} = require('./content.model');
 const logger = require('../../common/lib/logger');
 
 const getEvents = async () => {
@@ -43,8 +43,25 @@ const getTeams = async () => {
 };
 
 const getPasses = async () => {
-  return await PassesCategorySchema.find({});
-}
+  return await PassesCategory.find({});
+};
+
+const updatePassStatus = async (id, soldOut) => {
+  return await PassesCategory.findOneAndUpdate({ id }, { soldOut }, { new: true });
+};
+
+const getContentStatus = async (type) => {
+  const config = await Config.findOne({ key: `status_${type}` });
+  return config ? config.value : 'yes';
+};
+
+const updateContentStatus = async (type, status) => {
+  return await Config.findOneAndUpdate(
+    { key: `status_${type}` },
+    { value: status },
+    { upsert: true, new: true }
+  );
+};
 
 module.exports = {
   getEvents,
@@ -55,4 +72,7 @@ module.exports = {
   getConfig,
   getTeams,
   getPasses,
+  updatePassStatus,
+  getContentStatus,
+  updateContentStatus,
 };

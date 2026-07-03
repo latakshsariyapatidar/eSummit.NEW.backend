@@ -15,6 +15,8 @@
 const express = require('express');
 const router = express.Router();
 const contentController = require('./content.controller');
+const authMiddleware = require('../auth/auth.middleware');
+const adminMiddleware = require('../admin/admin.middleware');
 
 // Public fetch content endpoints
 router.get('/events', contentController.getEvents);
@@ -23,5 +25,12 @@ router.get('/faqs', contentController.getFAQs);
 router.get('/schedule', contentController.getSchedules);
 router.get('/teams', contentController.getTeams);
 router.get('/passes', contentController.getPasses);
+
+// Public status check endpoint
+router.get('/:type/status', contentController.getContentStatus);
+
+// Administrative routes protected by admin middleware
+router.put('/passes/:id/status', authMiddleware.protect, adminMiddleware.verifyAdminKey, contentController.updatePassStatus);
+router.put('/:type/status', authMiddleware.protect, adminMiddleware.verifyAdminKey, contentController.updateContentStatus);
 
 module.exports = router;
