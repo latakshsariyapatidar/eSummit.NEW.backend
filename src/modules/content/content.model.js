@@ -99,5 +99,5 @@ module.exports = {
   Merch: mongoose.model("Merch", MerchSchema, "merch"),
   Config: mongoose.model("Config", ConfigSchema, "configs"),
   Team: mongoose.model("Team", TeamSchema, "teams"),
-  PassesCategory: mongoose.model("PassesCategory", PassesCategorySchema, "passes"),
+  PassesCategory: mongoose.model("PassesCategory", PassesCategorySchema, "pass_categories"),
 };
