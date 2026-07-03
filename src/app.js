@@ -78,7 +78,7 @@ app.use(
         callback(new Error("CORS not allowed"));
       }
     },
-    methods: ["GET", "POST", "OPTIONS", "PATCH", "DELETE"],
+    methods: ["GET", "POST", "OPTIONS", "PATCH", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type", "X-Admin-Key", "Authorization"],
     credentials: true,
     maxAge: 86400, // 24 hours
