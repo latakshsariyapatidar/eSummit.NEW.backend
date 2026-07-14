@@ -1,9 +1,93 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const { PassesCategory } = require('../src/modules/content/content.model.js');
+const { PassesCategory, Schedule } = require('../src/modules/content/content.model.js');
 
 dotenv.config();
 
+const newSchedules = [
+  {
+    day: "Day 1 - 22nd August",
+    items: [
+      {
+        time: "8:30 AM - 10:00 AM",
+        title: "Opening Ceremony",
+        category: "Ceremony",
+        location: "TBD",
+      },
+      {
+        time: "10:00 AM - 1:00 PM",
+        title: "Find the Bug",
+        category: "Event",
+        location: "TBD",
+      },
+      {
+        time: "10:00 AM - 2:00 PM",
+        title: "E-Mun",
+        category: "Event",
+        location: "TBD",
+      },
+      {
+        time: "10:30 AM - 2:00 PM",
+        title: "Boardroom Battle",
+        category: "Event",
+        location: "TBD",
+      },
+      {
+        time: "2:30 PM - 5:30 PM",
+        title: "Intersect",
+        category: "Event",
+        location: "TBD",
+      },
+      {
+        time: "6:00 PM - 8:00 PM",
+        title: "Object Hunt",
+        category: "Event",
+        location: "TBD",
+      },
+    ],
+  },
+  {
+    day: "Day 2 - 23rd August",
+    items: [
+      {
+        time: "9:00 AM - 1:00 PM",
+        title: "E-Mun",
+        category: "Event",
+        location: "TBD",
+      },
+      {
+        time: "9:00 AM - 1:00 PM",
+        title: "Innovex",
+        category: "Event",
+        location: "TBD",
+      },
+      {
+        time: "10:00 AM - 12:00 PM",
+        title: "Boardroom Battle",
+        category: "Event",
+        location: "TBD",
+      },
+      {
+        time: "1:00 PM - 5:00 PM",
+        title: "GD",
+        category: "Event",
+        location: "TBD",
+      },
+      {
+        time: "1:00 PM - 5:00 PM",
+        title: "Auction-Boardroom Battle",
+        category: "Event",
+        location: "TBD",
+      },
+      {
+        time: "5:00 PM - 11:00 PM",
+        title: "Cultural Night",
+        category: "Event",
+        location: "TBD",
+      },
+    ],
+  },
+];
 
 const newPassCategories = [
   {
@@ -105,6 +189,12 @@ const seedPassCategories = async () => {
 
     await PassesCategory.insertMany(newPassCategories);
     console.log('Successfully seeded new pass categories.');
+
+    await Schedule.deleteMany({});
+    console.log('Cleared existing schedules.');
+
+    await Schedule.insertMany(newSchedules);
+    console.log('Successfully seeded new schedules.');
 
     process.exit(0);
   } catch (error) {
