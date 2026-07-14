@@ -4,6 +4,7 @@ const { PassesCategory } = require('../src/modules/content/content.model.js');
 
 dotenv.config();
 
+
 const newPassCategories = [
   {
     "id": "day1",
