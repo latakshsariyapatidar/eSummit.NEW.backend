@@ -27,6 +27,7 @@ const EventSchema = new Schema({
   about: { type: String },
   brief: { type: String },
   format: { type: [String] },
+  registrationLink: { type: String },
 });
 
 const SponsorSchema = new Schema({
