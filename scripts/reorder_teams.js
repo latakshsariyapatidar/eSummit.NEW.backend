@@ -23,33 +23,32 @@ const TeamSchema = new mongoose.Schema({
 const Team = mongoose.model('Team', TeamSchema, 'teams');
 
 async function reorder() {
-  await mongoose.connect("mongodb://latakshsariya146_db_user:db_user_password@ac-0tgex6o-shard-00-00.zw0wit8.mongodb.net:27017,ac-0tgex6o-shard-00-01.zw0wit8.mongodb.net:27017,ac-0tgex6o-shard-00-02.zw0wit8.mongodb.net:27017/?ssl=true&replicaSet=atlas-eir8t1-shard-0&authSource=admin&appName=esummit2026");
   const teams = await Team.find({}).lean();
-  
+
   const desiredOrder = ['rajat', 'nirav', 'soumya', 'lataksh', 'anant', 'shreya', 'mayank'];
-  
+
   teams.sort((a, b) => {
     const aName = a.lead?.name?.toLowerCase() || '';
     const bName = b.lead?.name?.toLowerCase() || '';
-    
+
     let aIndex = desiredOrder.findIndex(name => aName.includes(name));
     let bIndex = desiredOrder.findIndex(name => bName.includes(name));
-    
+
     if (aIndex === -1) aIndex = 999;
     if (bIndex === -1) bIndex = 999;
-    
+
     if (aIndex !== bIndex) return aIndex - bIndex;
     return 0; // maintain original relative order otherwise
   });
-  
+
   await Team.deleteMany({});
-  
+
   // Remove _id to let MongoDB generate new ones
   const docsToInsert = teams.map(t => {
     delete t._id;
     return t;
   });
-  
+
   await Team.insertMany(docsToInsert);
   console.log('Done reordering.');
   process.exit(0);
