@@ -1,44 +1,139 @@
+const asyncHandler = require("../../common/utils/asyncHandler");
+const apiResponse = require("../../common/utils/apiResponse");
+const Notification = require("../notifications/notification.model");
+const orderService = require("./orders.service");
+
+const {
+  submitOrderSchema,
+  submitUTRSchema,
+  approveOrderSchema,
+  rejectOrderSchema,
+} = require("./orders.validation");
+
 /**
- * Orders Controller - E-Summit '26
- * 
- * Interfaces order requests with the Order service.
- * Handles input parsing, validation schemas checks, and standardized outputs.
- * 
- * Logic to be implemented:
- * - checkout()               -> Validate buyer/attendee payloads, call ordersService.createOrder(), return order and UPI QR details.
- * - submitPaymentProof()     -> Capture transaction UTR/reference number or screenshot URL, link to order, update status to pending_verification.
- * - getOrderStatus()         -> Check payment/verification status, return attendee credentials if verified.
- * - listOrders()             -> Extract pagination and filtering parameters (status, search query), return array of matching orders.
- * - verifyOrder()            -> Admin triggers manual order confirmation.
- * - rejectOrder()            -> Admin rejects order with comments.
+ * ---------------------------------------------------------------------
+ * Create Order
+ * POST /orders/submit
+ * ---------------------------------------------------------------------
  */
+const createOrder = asyncHandler(async (req, res) => {
+  const payload = submitOrderSchema.parse(req.body);
 
-const ordersService = require('./orders.service');
-const apiResponse = require('../../common/utils/apiResponse');
-const asyncHandler = require('../../common/utils/asyncHandler');
-const { orderSubmitSchema } = require('./orders.validation');
+  const result = await orderService.createOrder(payload);
 
-// TODO: Define and export controller handler actions:
-// 1. submitOrder (POST /order/submit):
-//    - Validates request body using orderSubmitSchema
-//    - Call ordersService.submitOrder()
-//    - Returns HTTP 201 success response: { "status": "success", "order_id": "number or string" }
-//
-// 2. getOrderStatus (GET /order/status?phone={phone}):
-//    - Retrieve phone query parameter
-//    - Call ordersService.getOrdersByPhone()
-//    - Format and return orders:
-//      [ { ID, Status, OrderType, PaymentUTR, Items, CreatedAt, UpdatedAt } ]
-
-const submitOrder = asyncHandler(async (req, res) => {
-  // TODO: Implement submitOrder
+  return apiResponse.success(res, result, "Order created successfully.", 201);
 });
 
-const getOrderStatus = asyncHandler(async (req, res) => {
-  // TODO: Implement getOrderStatus
+/**
+ * ---------------------------------------------------------------------
+ * Submit UTR
+ * POST /orders/utr
+ * ---------------------------------------------------------------------
+ */
+const submitUTR = asyncHandler(async (req, res) => {
+  const payload = submitUTRSchema.parse(req.body);
+
+  const result = await orderService.submitUTR(payload);
+
+  return apiResponse.success(res, result, "Payment submitted successfully.");
+});
+
+/**
+ * ---------------------------------------------------------------------
+ * Get Pending Orders
+ * GET /orders/admin/pending
+ * ---------------------------------------------------------------------
+ */
+const getPendingOrders = asyncHandler(async (req, res) => {
+  const orders = await orderService.getPendingOrders();
+
+  return apiResponse.success(
+    res,
+    orders,
+    "Pending orders fetched successfully.",
+  );
+});
+
+/**
+ * ---------------------------------------------------------------------
+ * Get Order Details
+ * GET /orders/admin/:orderId
+ * ---------------------------------------------------------------------
+ */
+const getOrderDetails = asyncHandler(async (req, res) => {
+  const { orderId } = req.params;
+
+  const order = await orderService.getOrderDetails(orderId);
+
+  return apiResponse.success(res, order, "Order fetched successfully.");
+});
+
+/**
+ * ---------------------------------------------------------------------
+ * Approve Order
+ * POST /orders/admin/:orderId/approve
+ * ---------------------------------------------------------------------
+ */
+const approveOrder = asyncHandler(async (req, res) => {
+  approveOrderSchema.parse({
+    orderId: req.params.orderId,
+  });
+
+  const result = await orderService.approveOrder({
+    orderId: req.params.orderId,
+    adminId: req.user.id,
+  });
+
+  console.log("======== Got The results, inserting into the notifications queue =============");
+
+  await Notification.insertMany(
+    result.passes.map((pass) => ({
+      type: "PASS_VERIFIED",
+      payload: {
+        email: pass.attendeeEmail,
+        attendeeName: pass.attendeeName,
+        passId: pass.passId,
+        orderId: result.orderId,
+        qrBase64: pass.qr,
+      },
+    })),
+  );
+
+  return apiResponse.success(res, result, "Order approved successfully.");
+});
+
+/**
+ * ---------------------------------------------------------------------
+ * Reject Order
+ * POST /orders/admin/:orderId/reject
+ * ---------------------------------------------------------------------
+ */
+const rejectOrder = asyncHandler(async (req, res) => {
+  const payload = rejectOrderSchema.parse({
+    orderId: req.params.orderId,
+    reason: req.body.reason,
+  });
+
+  const result = await orderService.rejectOrder({
+    ...payload,
+    adminId: req.user.id,
+  });
+
+  await Notification.insertMany(
+    result.notifications.map((notification) => ({
+      type: "ORDER_REJECTED",
+      payload: notification,
+    })),
+  );
+
+  return apiResponse.success(res, result, "Order rejected successfully.");
 });
 
 module.exports = {
-  submitOrder,
-  getOrderStatus,
+  createOrder,
+  submitUTR,
+  getPendingOrders,
+  getOrderDetails,
+  approveOrder,
+  rejectOrder,
 };

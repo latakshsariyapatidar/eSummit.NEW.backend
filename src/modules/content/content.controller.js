@@ -34,23 +34,57 @@ const getSchedules = asyncHandler(async (req, res) => {
   return apiResponse.success(res, schedules);
 });
 
-const getMerch = asyncHandler(async (req, res) => {
-  const merch = await contentService.getMerch();
-  return apiResponse.success(res, merch);
-});
-
 const getTeams = asyncHandler(async (req, res) => {
   const teams = await contentService.getTeams();
   return apiResponse.success(res, teams);
 });
 
-const getConfig = asyncHandler(async (req, res) => {
-  const { key } = req.params;
-  const config = await contentService.getConfig(key);
-  if (!config) {
-    return apiResponse.error(res, `Config key ${key} not found`, 404);
+const getPasses = asyncHandler(async (req, res) => {
+  const passes = await contentService.getPasses();
+  return apiResponse.success(res, passes);
+});
+
+const updatePassStatus = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { soldOut } = req.body;
+  
+  if (soldOut === undefined) {
+    return apiResponse.error(res, 'soldOut field is required', 400);
   }
-  return apiResponse.success(res, config.value);
+
+  const updated = await contentService.updatePassStatus(id, soldOut);
+  if (!updated) {
+    return apiResponse.error(res, 'Pass category not found', 404);
+  }
+  return apiResponse.success(res, updated, 'Pass status updated successfully');
+});
+
+const getContentStatus = asyncHandler(async (req, res) => {
+  const { type } = req.params;
+  const allowedTypes = ['events', 'sponsors', 'faqs', 'schedule', 'teams', 'passes'];
+  
+  if (!allowedTypes.includes(type)) {
+    return apiResponse.error(res, 'Invalid content type', 400);
+  }
+
+  const status = await contentService.getContentStatus(type);
+  return apiResponse.success(res, status);
+});
+
+const updateContentStatus = asyncHandler(async (req, res) => {
+  const { type } = req.params;
+  const { status } = req.body;
+  const allowedTypes = ['events', 'sponsors', 'faqs', 'schedule', 'teams', 'passes'];
+
+  if (!allowedTypes.includes(type)) {
+    return apiResponse.error(res, 'Invalid content type', 400);
+  }
+  if (status !== 'yes' && status !== 'no') {
+    return apiResponse.error(res, 'Status must be yes or no', 400);
+  }
+
+  const updated = await contentService.updateContentStatus(type, status);
+  return apiResponse.success(res, updated, 'Content status updated successfully');
 });
 
 module.exports = {
@@ -58,7 +92,9 @@ module.exports = {
   getSponsors,
   getFAQs,
   getSchedules,
-  getMerch,
   getTeams,
-  getConfig,
+  getPasses,
+  updatePassStatus,
+  getContentStatus,
+  updateContentStatus,
 };

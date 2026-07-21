@@ -1,6 +1,6 @@
 /**
  * E-Summit '26 Backend - Express Application Setup
- * 
+ *
  * This file is responsible for:
  * 1. Initializing the Express instance.
  * 2. Mounting global security, utility, and parsing middlewares:
@@ -12,45 +12,40 @@
  *    - rateLimiter (DDoS and brute-force prevention)
  *    - requestLogger (HTTP request tracking)
  * 3. Mounting the routers of all functional modules:
- *    - /api/auth       -> auth.routes
- *    - /api/orders     -> orders.routes
- *    - /api/passes     -> passes.routes
- *    - /api/payments   -> payments.routes
- *    - /api/checkin    -> checkin.routes
- *    - /api/content    -> content.routes
+ *    - /auth       -> auth.routes
+ *    - /orders     -> orders.routes
+ *    - /passes     -> passes.routes
+ *    - /payments   -> payments.routes
+ *    - /content    -> content.routes
  * 4. Handling 404/Not Found requests.
  * 5. Registering the global error handler middleware.
  */
 
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const cookieParser = require('cookie-parser');
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 // Import common configuration and custom middlewares
-const env = require('./common/config/env');
-const errorHandler = require('./common/middleware/errorHandler');
-const rateLimiter = require('./common/middleware/rateLimiter');
-const requestLogger = require('./common/middleware/requestLogger');
+const errorHandler = require("./common/middleware/errorHandler");
+const rateLimiter = require("./common/middleware/rateLimiter");
+const requestLogger = require("./common/middleware/requestLogger");
 
 // Import module routers
-const { authRouter, adminRouter } = require('./modules/auth/auth.routes');
-const ordersRouter = require('./modules/orders/orders.routes');
-const passesRouter = require('./modules/passes/passes.routes');
-const paymentsRouter = require('./modules/payments/payments.routes');
-const checkinRouter = require('./modules/checkin/checkin.routes');
-const contentRouter = require('./modules/content/content.routes');
+const authRouter = require("./modules/auth/auth.routes");
+const adminRouter = require("./modules/admin/admin.route");
+const ordersRouter = require("./modules/orders/orders.routes");
+const passesRouter = require("./modules/passes/pass.routes");
+const contentRouter = require("./modules/content/content.routes");
 
 const app = express();
 
-// Custom MongoDB Injection Sanitizer compatible with Express 5
 const mongoSanitize = (req, res, next) => {
   const sanitizeObject = (obj) => {
-    if (obj && typeof obj === 'object') {
+    if (obj && typeof obj === "object") {
       for (const key in obj) {
-        if (key.startsWith('$') || key.includes('.')) {
+        if (key.startsWith("$") || key.includes(".")) {
           delete obj[key];
-        } else if (typeof obj[key] === 'object') {
+        } else if (typeof obj[key] === "object") {
           sanitizeObject(obj[key]);
         }
       }
@@ -63,50 +58,62 @@ const mongoSanitize = (req, res, next) => {
   next();
 };
 
-// Setup global middleware stubs
-app.use(helmet());
-app.use(cors({
-  origin: '*', // TODO: Configure Access-Control-Allow-Origin according to CORS requirements
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'X-Admin-Key'],
-}));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+const allowedOrigins = [
+  "http://localhost:5173", // Local dev
+  "http://localhost:3000", // Local dev alt
+  "http://iic.iitdh.ac.in",
+  "https://iic.iitdh.ac.in",
+  process.env.FRONTEND_URL, // From env var
+].filter(Boolean); // Remove undefined values
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS", "PATCH", "DELETE", "PUT"],
+    allowedHeaders: ["Content-Type", "X-Admin-Key", "Authorization"],
+    credentials: true,
+    maxAge: 86400, // 24 hours
+  }),
+);
+
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
 app.use(mongoSanitize);
 
-
-
 // TODO: 1. Setup rate limiting and request logger middleware:
 app.use(requestLogger);
-// app.use('/api/admin', authLimiter);
-// app.use('/api/order', paymentLimiter);
 
-// TODO: 2. Mount API Routes conforming to endpoints specification:
-// - /api/admin      -> authRouter (Admin Key Verify, DB State, Verify Order, Screenshot, passes config)
-// - /api/order      -> ordersRouter (Submit Order, Order Status)
-// - /api/attendance -> checkinRouter (Verify QR, Mark Attendance)
-app.use('/api/auth', authRouter);
-app.use('/api/admin', adminRouter);
-app.use('/api/order', ordersRouter);
-app.use('/api/attendance', checkinRouter);
-app.use('/api/content', contentRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/orders", ordersRouter);
+app.use("/api/content", contentRouter);
+app.use("/api/passes", passesRouter);
 
-app.get('/api/health', (req, res) => {
+app.get("/health", (req, res) => {
   res.status(200).json({
-    message: 'Server is running',
+    message: "Server is running",
     timestamp: Date.now(),
   });
 });
 
-// TODO: 3. Handle undefined routes (throw a standard 404 API error)
+// Handle undefined routes (throw a standard 404 API error)
 app.use((req, res, next) => {
-  const err = new Error('Endpoint not found');
+  const err = new Error("Endpoint not found");
   err.statusCode = 404;
   next(err);
 });
 
-// TODO: 4. Mount global errorHandler middleware as the final middleware
+// Mount global errorHandler middleware as the final middleware
 app.use(errorHandler);
 
 module.exports = app;

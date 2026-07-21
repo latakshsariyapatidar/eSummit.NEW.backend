@@ -1,85 +1,204 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payment Verification Failed - E-Summit '26</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0d0f12;
-      color: #e2e8f0;
-      margin: 0;
-      padding: 0;
-    }
-    .email-container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: #14171d;
-      border: 1px solid #1e293b;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .header {
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
-      padding: 30px;
-      text-align: center;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: #ffffff;
-    }
-    .content {
-      padding: 40px 30px;
-      line-height: 1.6;
-    }
-    .content h2 {
-      color: #ef4444;
-      font-size: 20px;
-      margin-top: 0;
-    }
-    .rejection-box {
-      background: #271c1c;
-      border: 1px solid #7f1d1d;
-      padding: 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-      color: #fca5a5;
-    }
-    .footer {
-      background: #090a0f;
-      padding: 20px;
-      text-align: center;
-      font-size: 12px;
-      color: #64748b;
-      border-top: 1px solid #1e293b;
-    }
-  </style>
-</head>
-<body>
-  <div class="email-container">
-    <div class="header">
-      <h1>VERIFICATION FAILED</h1>
-    </div>
-    <div class="content">
-      <h2>Hello {{buyerName}},</h2>
-      <p>Unfortunately, our team was unable to verify your payment for Order ID <strong>{{orderId}}</strong>. As a result, your ticket reservation has been flagged.</p>
-      
-      <div class="rejection-box">
-        <strong>Reason for rejection reported by admin:</strong>
-        <p>{{rejectionReason}}</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Booking Rejected</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #f1f5f9;
+        color: #334155;
+        font-family: "Manrope", Arial, sans-serif;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .header {
+        background: #dc2626;
+        padding: 24px 32px;
+        text-align: center;
+      }
+
+      .header h1 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      .content {
+        padding: 32px;
+        color: #334155;
+      }
+
+      .section {
+        margin-bottom: 32px;
+      }
+
+      .section:last-child {
+        margin-bottom: 0;
+      }
+
+      .section h2 {
+        margin: 0 0 12px;
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      .section h3 {
+        margin: 0 0 12px;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .section p {
+        margin: 0;
+        line-height: 1.7;
+        font-size: 16px;
+      }
+
+      .rejection-box {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 20px;
+      }
+
+      .rejection-box h3 {
+        color: #b91c1c;
+      }
+
+      .rejection-box p {
+        color: #991b1b;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .steps-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 20px;
+      }
+
+      .steps-box ul {
+        margin: 0;
+        padding-left: 20px;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .steps-box li {
+        margin-bottom: 8px;
+      }
+
+      .closing-text {
+        color: #64748b;
+        font-size: 14px !important;
+        line-height: 1.7;
+      }
+
+      .footer {
+        border-top: 1px solid #e2e8f0;
+        background: #f8fafc;
+        padding: 20px 24px;
+        text-align: center;
+        font-size: 12px;
+        color: #64748b;
+        line-height: 1.6;
+      }
+
+      @media only screen and (max-width: 600px) {
+        body {
+          padding: 12px;
+        }
+
+        .content {
+          padding: 24px;
+        }
+
+        .header {
+          padding: 20px 24px;
+        }
+
+        .header h1 {
+          font-size: 28px;
+        }
+
+        .section h2 {
+          font-size: 22px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>E-SUMMIT '26</h1>
       </div>
-      
-      <p>Please double-check your payment reference (UTR) and make sure the uploaded screenshot clearly shows the transaction details, date, and E-Summit account beneficiary name.</p>
-      <p>You can log back into the checkout portal, re-upload the correct details, and submit for verification again.</p>
+
+      <!-- Body -->
+      <div class="content">
+        <!-- Greeting -->
+        <div class="section">
+          <h2>Hello {{buyerName}},</h2>
+
+          <p>
+            Unfortunately, we were unable to verify your payment, and your
+            booking request has been rejected.
+          </p>
+        </div>
+
+        <!-- Rejection Reason -->
+        <div class="section rejection-box">
+          <h3>Reason for Rejection</h3>
+
+          <p>{{rejectionReason}}</p>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="section steps-box">
+          <h3>What You Can Do</h3>
+
+          <ul>
+            <li>Review the rejection reason above.</li>
+            <li>Submit a new booking with the correct payment details.</li>
+            <li>Ensure the uploaded UTR is accurate.</li>
+          </ul>
+        </div>
+
+        <!-- Closing -->
+        <div class="section">
+          <p class="closing-text">
+            If you believe this rejection was made in error, please contact the
+            E-Summit support team with your payment details for further
+            assistance.
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        © 2026 E-Summit IIT Dharwad<br />
+        This is an automated email. Please do not reply.
+      </div>
     </div>
-    <div class="footer">
-      &copy; 2026 E-Summit IIT Roorkee. All rights reserved.
-    </div>
-  </div>
-</body>
+  </body>
 </html>

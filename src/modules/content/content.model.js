@@ -1,8 +1,8 @@
 /**
  * Content Model - E-Summit '26
- * 
+ *
  * Houses multiple lightweight schemas mapping static and landing page elements (FAQ, Sponsors, Events, Speakers).
- * 
+ *
  * Schemas to define:
  * 1. SpeakerSchema:
  *    - name, designation, organization, avatarUrl, bio, socialLinks (object).
@@ -14,7 +14,7 @@
  *    - question, answer, category ('registration', 'events', 'accommodation').
  */
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -27,6 +27,7 @@ const EventSchema = new Schema({
   about: { type: String },
   brief: { type: String },
   format: { type: [String] },
+  registrationLink: { type: String },
 });
 
 const SponsorSchema = new Schema({
@@ -42,12 +43,14 @@ const FAQSchema = new Schema({
 
 const ScheduleSchema = new Schema({
   day: { type: String, required: true },
-  items: [{
-    time: { type: String, required: true },
-    title: { type: String, required: true },
-    category: { type: String },
-    location: { type: String },
-  }],
+  items: [
+    {
+      time: { type: String, required: true },
+      title: { type: String, required: true },
+      category: { type: String },
+      location: { type: String },
+    },
+  ],
 });
 
 const MerchSchema = new Schema({
@@ -72,18 +75,30 @@ const TeamSchema = new Schema({
     image: { type: String },
     event: { type: String },
   },
-  crew: [{
-    name: { type: String },
-    image: { type: String },
-  }],
+  crew: [
+    {
+      name: { type: String },
+      image: { type: String },
+    },
+  ],
+});
+
+const PassesCategorySchema = new Schema({
+  id: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  benefits: { type: [String], required: true },
+  soldOut: { type: Boolean, default: false },
+  tags: { type: String },
 });
 
 module.exports = {
-  Event: mongoose.model('Event', EventSchema, 'events'),
-  Sponsor: mongoose.model('Sponsor', SponsorSchema, 'sponsors'),
-  FAQ: mongoose.model('FAQ', FAQSchema, 'faqs'),
-  Schedule: mongoose.model('Schedule', ScheduleSchema, 'schedules'),
-  Merch: mongoose.model('Merch', MerchSchema, 'merch'),
-  Config: mongoose.model('Config', ConfigSchema, 'configs'),
-  Team: mongoose.model('Team', TeamSchema, 'teams'),
+  Event: mongoose.model("Event", EventSchema, "events"),
+  Sponsor: mongoose.model("Sponsor", SponsorSchema, "sponsors"),
+  FAQ: mongoose.model("FAQ", FAQSchema, "faqs"),
+  Schedule: mongoose.model("Schedule", ScheduleSchema, "schedules"),
+  Merch: mongoose.model("Merch", MerchSchema, "merch"),
+  Config: mongoose.model("Config", ConfigSchema, "configs"),
+  Team: mongoose.model("Team", TeamSchema, "teams"),
+  PassesCategory: mongoose.model("PassesCategory", PassesCategorySchema, "pass_categories"),
 };

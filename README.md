@@ -313,52 +313,14 @@ npm run seed
 
 ## 📡 API Reference
 
-All endpoints are prefixed with `/api`. Below is a quick-reference table — for full request/response schemas, see [`docs/API.md`](docs/API.md).
+All endpoints (except `/health`) are prefixed with `/api`. For detailed request/response schemas, request bodies, success response bodies, and error structures, please refer to the module-specific documentation:
 
-### Health Check
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/health` | — | Server health status |
-
-### Public Content Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/content/events` | List all events/competitions |
-| `GET` | `/api/content/sponsors` | List all sponsors by tier |
-| `GET` | `/api/content/faqs` | List all FAQs |
-| `GET` | `/api/content/schedule` | Day-wise event schedule |
-| `GET` | `/api/content/merch` | Available merchandise |
-| `GET` | `/api/content/teams` | Team structure & members |
-| `GET` | `/api/content/config/:key` | Dynamic config values (e.g. `UPI_IDS`, `TARGET_DATE`) |
-
-### Order Management
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/api/order/submit` | — | Submit a new pass/merch order |
-| `GET` | `/api/order/status?phone=XXX` | — | Check order status by phone number |
-
-### Gate Check-in / Attendance
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/api/attendance/verify-qr` | — | Verify a scanned QR code |
-| `POST` | `/api/attendance/mark` | — | Mark an attendee as present |
-
-### Admin Dashboard
-
-> All admin endpoints require the `X-Admin-Key` header.
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/admin/verify-key` | Authenticate admin key |
-| `GET` | `/api/admin/db-state` | Fetch full database state (orders + users) |
-| `POST` | `/api/admin/order/verify` | Update order verification status |
-| `GET` | `/api/admin/payment-screenshot/:filename` | Retrieve payment proof image |
-| `GET` | `/api/admin/passes` | Fetch pass availability settings |
-| `POST` | `/api/admin/passes/update` | Toggle pass availability/sold-out |
+*   🔑 **[Auth Module API Documentation](docs/auth.md)**: Key-based login verification, session check, and logout.
+*   🛡️ **[Admin Module API Documentation](docs/admin.md)**: Generate, list, and revoke volunteer access keys.
+*   📦 **[Orders Module API Documentation](docs/orders.md)**: Order creation, payment submission (UTR), and admin approvals/rejections.
+*   🎫 **[Passes Module API Documentation](docs/passes.md)**: Pass detail lookups and volunteer gate check-in scanning.
+*   📝 **[Content Module API Documentation](docs/content.md)**: Retrieve public CMS pages, event schedules, and passes configuration.
+*   💚 **[Health API Documentation](docs/health.md)**: Simple system health probe.
 
 ---
 
