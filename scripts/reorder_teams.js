@@ -23,7 +23,7 @@ const TeamSchema = new mongoose.Schema({
 const Team = mongoose.model('Team', TeamSchema, 'teams');
 
 async function reorder() {
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect("mongodb://latakshsariya146_db_user:db_user_password@ac-0tgex6o-shard-00-00.zw0wit8.mongodb.net:27017,ac-0tgex6o-shard-00-01.zw0wit8.mongodb.net:27017,ac-0tgex6o-shard-00-02.zw0wit8.mongodb.net:27017/?ssl=true&replicaSet=atlas-eir8t1-shard-0&authSource=admin&appName=esummit2026");
   const teams = await Team.find({}).lean();
   
   const desiredOrder = ['rajat', 'nirav', 'soumya', 'lataksh', 'anant', 'shreya', 'mayank'];

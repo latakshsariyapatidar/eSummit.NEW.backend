@@ -24,11 +24,13 @@ const env = require('../../common/config/env');
  * Falls back to UPI_VPA only when UPI_VPAS is not configured.
  */
 const parseVpas = (...values) => {
-  return values
+  const vpas = values
     .filter(Boolean)
     .flatMap((value) => value.split(/[,\n;|]+/))
     .map((id) => id.trim())
     .filter(Boolean);
+
+  return [...new Set(vpas)];
 };
 
 const UPI_VPAS = parseVpas(env.UPI_VPAS || env.UPI_VPA);
