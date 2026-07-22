@@ -8,6 +8,7 @@ const orderController = require('./orders.controller');
 const router = express.Router();
 const adminMiddleware = require('../admin/admin.middleware');
 const authMiddleware = require('../auth/auth.middleware');
+const { paymentLimiter } = require('../../common/middleware/rateLimiter');
 
 /**
  * ---------------------------------------------------------------------
@@ -20,14 +21,14 @@ const authMiddleware = require('../auth/auth.middleware');
  *
  * POST /orders/submit
  */
-router.post('/submit', orderController.createOrder);
+router.post('/submit', paymentLimiter, orderController.createOrder);
 
 /**
  * Submit payment UTR.
  *
  * POST /orders/utr
  */
-router.post('/utr', orderController.submitUTR);
+router.post('/utr', paymentLimiter, orderController.submitUTR);
 
 /**
  * ---------------------------------------------------------------------
