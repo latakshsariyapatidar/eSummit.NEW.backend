@@ -23,9 +23,10 @@ const errorHandler = (err, req, res, next) => {
   let message = err.message || 'Internal Server Error';
 
   // Zod validation error
-  if (err.name === 'ZodError') {
+  if (err.name === 'ZodError' || err.issues || err.constructor?.name === 'ZodError') {
     statusCode = 400;
-    message = err.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') || 'Validation failed';
+    const issues = err.issues || err.errors || [];
+    message = issues.map((e) => `${(e.path || []).join('.')}: ${e.message}`).join(', ') || err.message || 'Validation failed';
   }
 
   // Mongoose validation error

@@ -1,9 +1,9 @@
-const fs = require("fs/promises");
-const path = require("path");
-const Handlebars = require("handlebars");
+const fs = require('fs/promises');
+const path = require('path');
+const Handlebars = require('handlebars');
 
-const Notification = require("./notification.model");
-const { transporter } = require("./providers/email.provider");
+const Notification = require('./notification.model');
+const { transporter } = require('./providers/email.provider');
 
 let isProcessing = false;
 
@@ -24,8 +24,8 @@ const RETRY_DELAYS = [
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function compileTemplate(templateName, data) {
-  const filePath = path.join(__dirname, "templates", `${templateName}.html`);
-  const html = await fs.readFile(filePath, "utf8");
+  const filePath = path.join(__dirname, 'templates', `${templateName}.html`);
+  const html = await fs.readFile(filePath, 'utf8');
 
   return Handlebars.compile(html)(data);
 }
@@ -47,14 +47,14 @@ async function sendEmail({
   };
 
   if (qrBase64) {
-    const base64 = qrBase64.replace(/^data:image\/png;base64,/, "");
+    const base64 = qrBase64.replace(/^data:image\/png;base64,/, '');
 
     mailOptions.attachments = [
       {
-        filename: "qr.png",
+        filename: 'qr.png',
         content: base64,
-        encoding: "base64",
-        cid: "qr-code",
+        encoding: 'base64',
+        cid: 'qr-code',
       },
     ];
   }
@@ -69,7 +69,7 @@ async function sendPassVerifiedEmail({
   orderId,
   qrBase64,
 }) {
-  const html = await compileTemplate("orderVerified", {
+  const html = await compileTemplate('orderVerified', {
     buyerName: attendeeName,
     passId,
     orderId,
@@ -84,7 +84,7 @@ async function sendPassVerifiedEmail({
 }
 
 async function sendOrderRejectedEmail({ email, buyerName, rejectionReason }) {
-  const html = await compileTemplate("orderRejected", {
+  const html = await compileTemplate('orderRejected', {
     buyerName,
     rejectionReason,
   });
@@ -109,19 +109,19 @@ async function processPendingNotifications() {
   isProcessing = true;
 
   try {
-    console.log("[Notification Worker] Processing notification queue...");
+    console.log('[Notification Worker] Processing notification queue...');
 
     // Recover notifications stuck in PROCESSING
     await Notification.updateMany(
       {
-        status: "PROCESSING",
+        status: 'PROCESSING',
         processingStartedAt: {
           $lt: new Date(Date.now() - RECOVERY_TIMEOUT),
         },
       },
       {
         $set: {
-          status: "PENDING",
+          status: 'PENDING',
           processingStartedAt: null,
           nextRetryAt: new Date(),
         },
@@ -131,14 +131,14 @@ async function processPendingNotifications() {
     for (let i = 0; i < MAX_BATCH_SIZE; i++) {
       const notification = await Notification.findOneAndUpdate(
         {
-          status: "PENDING",
+          status: 'PENDING',
           nextRetryAt: {
             $lte: new Date(),
           },
         },
         {
           $set: {
-            status: "PROCESSING",
+            status: 'PROCESSING',
             processingStartedAt: new Date(),
           },
         },
@@ -146,7 +146,7 @@ async function processPendingNotifications() {
           sort: {
             createdAt: 1,
           },
-          returnDocument: "after",
+          returnDocument: 'after',
         },
       );
 
@@ -168,7 +168,7 @@ async function processPendingNotifications() {
         await handler(notification.payload);
 
         await Notification.findByIdAndUpdate(notification._id, {
-          status: "COMPLETED",
+          status: 'COMPLETED',
           processedAt: new Date(),
           processingStartedAt: null,
           nextRetryAt: null,
@@ -184,13 +184,13 @@ async function processPendingNotifications() {
 
         await Notification.findByIdAndUpdate(notification._id, {
           attempts,
-          status: attempts >= MAX_RETRIES ? "FAILED" : "PENDING",
+          status: attempts >= MAX_RETRIES ? 'FAILED' : 'PENDING',
           processingStartedAt: null,
           nextRetryAt: new Date(Date.now() + retryDelay),
           lastError: err.message,
         });
 
-        console.error("[Notification] Failed", {
+        console.error('[Notification] Failed', {
           notificationId: notification._id.toString(),
           type: notification.type,
           attempts,
@@ -201,7 +201,7 @@ async function processPendingNotifications() {
       }
 
       const hasMore = await Notification.exists({
-        status: "PENDING",
+        status: 'PENDING',
         nextRetryAt: {
           $lte: new Date(),
         },
@@ -212,7 +212,7 @@ async function processPendingNotifications() {
       }
     }
   } catch (err) {
-    console.error("[Notification Worker]", err);
+    console.error('[Notification Worker]', err);
   } finally {
     isProcessing = false;
   }

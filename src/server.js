@@ -11,36 +11,36 @@
  * 5. Catching unhandled promise rejections and uncaught exceptions to log and exit safely.
  */
 
-const dotenv = require("dotenv");
+const dotenv = require('dotenv');
 
 // Load environment variables early in the lifecycle
 dotenv.config();
 
-const app = require("./app");
-const env = require("./common/config/env");
-const connectDB = require("./common/config/db");
-const logger = require("./common/lib/logger");
+const app = require('./app');
+const env = require('./common/config/env');
+const connectDB = require('./common/config/db');
+const logger = require('./common/lib/logger');
 const {
   initEmailProvider,
-} = require("./modules/notifications/providers/email.provider");
+} = require('./modules/notifications/providers/email.provider');
 
 async function startServer() {
   try {
-    console.log("Starting server...");
+    console.log('Starting server...');
     await connectDB();
-    console.log("Database connected successfully.");
-    await initEmailProvider();
-    console.log("Email provider initialized successfully.");
+    console.log('Database connected successfully.');
+    // await initEmailProvider();
+    console.log('Email provider initialized successfully.');
 
     // Start your notification worker AFTER SMTP is ready
-    require("./workers/notification.worker");
+    // require("./workers/notification.worker");
 
     // Connect DB, app.listen(), etc.
     app.listen(process.env.PORT, () => {
       console.log(`Server running on ${process.env.PORT}`);
     });
   } catch (err) {
-    console.error("Failed to start server:", err);
+    console.error('Failed to start server:', err);
     process.exit(1);
   }
 }

@@ -11,6 +11,11 @@ const {
  */
 const passRequestSchema = new mongoose.Schema(
   {
+    eventName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     passType: {
       type: String,
       required: true,
@@ -68,7 +73,7 @@ const historySchema = new mongoose.Schema(
   },
   {
     _id: false,
-  }
+  },
 );
 
 const orderSchema = new mongoose.Schema(
@@ -202,7 +207,7 @@ const orderSchema = new mongoose.Schema(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 

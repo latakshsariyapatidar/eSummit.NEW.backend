@@ -21,23 +21,28 @@ require('dotenv').config();
 const { z } = require('zod');
 
 
-const envSchema = z.object({
-  PORT: z.coerce.number().default(5000),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  MONGODB_URI: z.string().min(1, 'MONGODB_URI is required'),
-  JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),
-  JWT_EXPIRES_IN: z.string().default('7d'),
-  UPI_VPA: z.string().min(1, 'UPI_VPA is required'),
-  UPI_VPAS: z.string().optional(),
-  UPI_MERCHANT_NAME: z.string().min(1, 'UPI_MERCHANT_NAME is required'),
-  UPI_CURRENCY: z.string().default('INR'),
-  SMTP_HOST: z.string().optional(),
-  SMTP_PORT: z.coerce.number().optional(),
-  SMTP_USER: z.string().optional(),
-  SMTP_PASS: z.string().optional(),
-  SMTP_FROM: z.string().optional(),
-  ADMIN_KEY: z.string().default('adminkey'),
-});
+const envSchema = z
+  .object({
+    PORT: z.coerce.number().default(5000),
+    NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+    MONGODB_URI: z.string().min(1, 'MONGODB_URI is required'),
+    JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),
+    JWT_EXPIRES_IN: z.string().default('7d'),
+    UPI_VPA: z.string().optional(),
+    UPI_VPAS: z.string().optional(),
+    UPI_MERCHANT_NAME: z.string().min(1, 'UPI_MERCHANT_NAME is required'),
+    UPI_CURRENCY: z.string().default('INR'),
+    SMTP_HOST: z.string().optional(),
+    SMTP_PORT: z.coerce.number().optional(),
+    SMTP_USER: z.string().optional(),
+    SMTP_PASS: z.string().optional(),
+    SMTP_FROM: z.string().optional(),
+    ADMIN_KEY: z.string().default('adminkey'),
+  })
+  .refine((data) => data.UPI_VPA || data.UPI_VPAS, {
+    message: 'Either UPI_VPA or UPI_VPAS must be configured in environment',
+    path: ['UPI_VPA'],
+  });
 
 let env;
 try {

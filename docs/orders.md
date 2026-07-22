@@ -34,6 +34,7 @@ Creates a new pending ticket/pass order and returns a UPI payment QR code (Base6
   "cartValue": 1500,
   "passes": [
     {
+      "eventName": "Hackathon 2026",
       "passType": "Day 1",
       "passPrice": 750,
       "attendeeName": "Riya Sharma",
@@ -42,6 +43,7 @@ Creates a new pending ticket/pass order and returns a UPI payment QR code (Base6
       "collegeName": "IIT Dharwad"
     },
     {
+      "eventName": "Hackathon 2026",
       "passType": "Day 1",
       "passPrice": 750,
       "attendeeName": "Arjun Mehta",
@@ -56,6 +58,7 @@ Creates a new pending ticket/pass order and returns a UPI payment QR code (Base6
 ##### Validation Constraints:
 * `cartValue` (number, positive, required): Must exactly equal the sum of all `passPrice` values.
 * `passes` (array of objects, minimum 1 item, required):
+  * `eventName` (string, minimum 1 character, required).
   * `passType` (string, required): Cannot be empty.
   * `passPrice` (number, positive, required): Price of individual pass.
   * `attendeeName` (string, minimum 2 characters, required).
@@ -194,6 +197,7 @@ X-Admin-Key: <admin_key>
       "expiresAt": "2026-01-15T10:30:00.000Z",
       "passRequests": [
         {
+          "eventName": "Hackathon 2026",
           "passType": "Day 1",
           "passPrice": 750,
           "attendeeName": "Riya Sharma",

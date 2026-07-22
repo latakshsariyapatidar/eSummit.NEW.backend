@@ -14,7 +14,7 @@
  *    - question, answer, category ('registration', 'events', 'accommodation').
  */
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -93,12 +93,12 @@ const PassesCategorySchema = new Schema({
 });
 
 module.exports = {
-  Event: mongoose.model("Event", EventSchema, "events"),
-  Sponsor: mongoose.model("Sponsor", SponsorSchema, "sponsors"),
-  FAQ: mongoose.model("FAQ", FAQSchema, "faqs"),
-  Schedule: mongoose.model("Schedule", ScheduleSchema, "schedules"),
-  Merch: mongoose.model("Merch", MerchSchema, "merch"),
-  Config: mongoose.model("Config", ConfigSchema, "configs"),
-  Team: mongoose.model("Team", TeamSchema, "teams"),
-  PassesCategory: mongoose.model("PassesCategory", PassesCategorySchema, "pass_categories"),
+  Event: mongoose.model('Event', EventSchema, 'events'),
+  Sponsor: mongoose.model('Sponsor', SponsorSchema, 'sponsors'),
+  FAQ: mongoose.model('FAQ', FAQSchema, 'faqs'),
+  Schedule: mongoose.model('Schedule', ScheduleSchema, 'schedules'),
+  Merch: mongoose.model('Merch', MerchSchema, 'merch'),
+  Config: mongoose.model('Config', ConfigSchema, 'configs'),
+  Team: mongoose.model('Team', TeamSchema, 'teams'),
+  PassesCategory: mongoose.model('PassesCategory', PassesCategorySchema, 'pass_categories'),
 };

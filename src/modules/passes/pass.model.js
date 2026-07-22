@@ -55,6 +55,12 @@ const passSchema = new mongoose.Schema(
       min: 0,
     },
 
+    eventName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     /**
      * Attendee Details
      */
@@ -124,7 +130,7 @@ const passSchema = new mongoose.Schema(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 module.exports = {

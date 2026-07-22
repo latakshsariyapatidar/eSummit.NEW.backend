@@ -18,32 +18,66 @@ const QRCode = require('qrcode');
 const env = require('../../common/config/env');
 
 /**
- * UPI_VPAS is expected as a comma-separated list in env, e.g.:
+ * UPI_VPAS can be specified in env as a comma, space, newline, pipe, semicolon-separated list
+ * or a JSON array string e.g.:
  *   UPI_VPAS=esummit1@okhdfcbank,esummit2@okicici,esummit3@oksbi
+ *   UPI_VPAS=["esummit1@okhdfcbank", "esummit2@okicici"]
  *
- * Falls back to UPI_VPA only when UPI_VPAS is not configured.
+ * Merges UPI_VPAS and UPI_VPA to ensure all configured VPAs are utilized in round-robin order.
  */
 const parseVpas = (...values) => {
-  return values
-    .filter(Boolean)
-    .flatMap((value) => value.split(/[,\n;|]+/))
-    .map((id) => id.trim())
-    .filter(Boolean);
+  const list = [];
+  for (const val of values) {
+    if (!val) {continue;}
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (!trimmed) {continue;}
+
+      // Handle JSON array string
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            parsed.forEach((item) => {
+              if (typeof item === 'string' && item.trim()) {
+                list.push(item.trim());
+              }
+            });
+            continue;
+          }
+        } catch (e) {
+          // Fallback to delimiter splitting
+        }
+      }
+
+      // Split by comma, space, newline, semicolon, pipe
+      const items = trimmed.split(/[\s,\n;|]+/);
+      for (const item of items) {
+        if (item.trim()) {
+          list.push(item.trim());
+        }
+      }
+    }
+  }
+  return list;
 };
-
-const UPI_VPAS = parseVpas(env.UPI_VPAS || env.UPI_VPA);
-
-if (UPI_VPAS.length === 0) {
-  throw new Error(
-    'No UPI VPA configured. Set UPI_VPAS (comma-separated) or UPI_VPA in env.'
-  );
-}
 
 let nextVpaIndex = 0;
 
+const getVpaList = () => {
+  const vpas = parseVpas(env.UPI_VPAS, env.UPI_VPA);
+  if (vpas.length === 0) {
+    throw new Error(
+      'No UPI VPA configured. Set UPI_VPAS or UPI_VPA in environment.',
+    );
+  }
+  return vpas;
+};
+
 const pickNextVpa = () => {
-  const vpa = UPI_VPAS[nextVpaIndex];
-  nextVpaIndex = (nextVpaIndex + 1) % UPI_VPAS.length;
+  const vpas = getVpaList();
+  const vpa = vpas[nextVpaIndex % vpas.length];
+  nextVpaIndex = (nextVpaIndex + 1) % vpas.length;
   return vpa;
 };
 

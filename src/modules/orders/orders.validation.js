@@ -5,6 +5,13 @@ const { GENDERS } = require('./orders.constants');
  * Individual attendee/pass validation
  */
 const passRequestSchema = z.object({
+  eventName: z
+    .string({
+      required_error: 'Event name is required',
+    })
+    .trim()
+    .min(1, 'Event name is required'),
+
   passType: z
     .string({
       required_error: 'Pass type is required',

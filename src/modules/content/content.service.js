@@ -59,7 +59,7 @@ const updateContentStatus = async (type, status) => {
   return await Config.findOneAndUpdate(
     { key: `status_${type}` },
     { value: status },
-    { upsert: true, new: true }
+    { upsert: true, new: true },
   );
 };
 

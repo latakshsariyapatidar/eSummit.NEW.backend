@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      enum: ["PASS_VERIFIED", "ORDER_REJECTED"],
+      enum: ['PASS_VERIFIED', 'ORDER_REJECTED'],
       required: true,
     },
 
@@ -15,8 +15,8 @@ const notificationSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["PENDING", "PROCESSING", "COMPLETED", "FAILED"],
-      default: "PENDING",
+      enum: ['PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'],
+      default: 'PENDING',
       index: true,
     },
 
@@ -46,4 +46,4 @@ const notificationSchema = new mongoose.Schema(
   },
 );
 
-module.exports = mongoose.model("Notification", notificationSchema);
+module.exports = mongoose.model('Notification', notificationSchema);

@@ -1,13 +1,13 @@
-const express = require("express");
+const express = require('express');
 
-const orderController = require("./orders.controller");
+const orderController = require('./orders.controller');
 
 // Replace with your authentication middleware
 // const { authenticate, authorizeAdmin } = require('../../common/middleware/auth');
 
 const router = express.Router();
-const adminMiddleware = require("../admin/admin.middleware");
-const authMiddleware = require("../auth/auth.middleware");
+const adminMiddleware = require('../admin/admin.middleware');
+const authMiddleware = require('../auth/auth.middleware');
 
 /**
  * ---------------------------------------------------------------------
@@ -20,14 +20,14 @@ const authMiddleware = require("../auth/auth.middleware");
  *
  * POST /orders/submit
  */
-router.post("/submit", orderController.createOrder);
+router.post('/submit', orderController.createOrder);
 
 /**
  * Submit payment UTR.
  *
  * POST /orders/utr
  */
-router.post("/utr", orderController.submitUTR);
+router.post('/utr', orderController.submitUTR);
 
 /**
  * ---------------------------------------------------------------------
@@ -41,7 +41,7 @@ router.post("/utr", orderController.submitUTR);
  * GET /orders/admin/pending
  */
 router.get(
-  "/admin/pending",
+  '/admin/pending',
   authMiddleware.protect,
   adminMiddleware.verifyAdminKey,
   orderController.getPendingOrders,
@@ -53,7 +53,7 @@ router.get(
  * GET /orders/admin/:orderId
  */
 router.get(
-  "/admin/:orderId",
+  '/admin/:orderId',
   authMiddleware.protect,
   adminMiddleware.verifyAdminKey,
   orderController.getOrderDetails,
@@ -65,7 +65,7 @@ router.get(
  * POST /orders/admin/:orderId/approve
  */
 router.post(
-  "/admin/:orderId/approve",
+  '/admin/:orderId/approve',
   authMiddleware.protect,
   adminMiddleware.verifyAdminKey,
   orderController.approveOrder,
@@ -77,7 +77,7 @@ router.post(
  * POST /orders/admin/:orderId/reject
  */
 router.post(
-  "/admin/:orderId/reject",
+  '/admin/:orderId/reject',
   authMiddleware.protect,
   adminMiddleware.verifyAdminKey,
   orderController.rejectOrder,

@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 
-const passController = require("./pass.controller");
-const authMiddleware = require("../auth/auth.middleware");
+const passController = require('./pass.controller');
+const authMiddleware = require('../auth/auth.middleware');
 
 // Replace these with your actual middleware
 // const { authenticate, authorizeAdmin } = require('../../common/middleware/auth');
@@ -19,14 +19,14 @@ const router = express.Router();
  *
  * GET /passes/:passId
  */
-router.get("/:passId", passController.getPassById);
+router.get('/:passId', passController.getPassById);
 
 /**
  * Get all passes belonging to an order.
  *
  * GET /passes/order/:orderId
  */
-router.get("/order/:orderId", passController.getPassesByOrder);
+router.get('/order/:orderId', passController.getPassesByOrder);
 
 /**
  * ---------------------------------------------------------------------
@@ -40,7 +40,7 @@ router.get("/order/:orderId", passController.getPassesByOrder);
  * POST /passes/:passId/check-in
  */
 router.post(
-  "/:passId/check-in",
+  '/:passId/check-in',
 
   authMiddleware.protect,
   authMiddleware.requireVolunteer,
@@ -55,7 +55,7 @@ router.post(
  * POST /passes/:passId/cancel
  */
 router.post(
-  "/:passId/cancel",
+  '/:passId/cancel',
   authMiddleware.protect,
   authMiddleware.requireVolunteer,
   // authenticate,

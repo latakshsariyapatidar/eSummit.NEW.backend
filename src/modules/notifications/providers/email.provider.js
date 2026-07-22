@@ -11,9 +11,9 @@
  *   - Invokes transporter.sendMail() and returns promise result.
  */
 
-const nodemailer = require("nodemailer");
-const env = require("../../../common/config/env");
-const logger = require("../../../common/lib/logger");
+const nodemailer = require('nodemailer');
+const env = require('../../../common/config/env');
+const logger = require('../../../common/lib/logger');
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -30,7 +30,7 @@ const transporter = nodemailer.createTransport({
 
 async function initEmailProvider() {
   await transporter.verify();
-  console.log("SMTP connection verified");
+  console.log('SMTP connection verified');
 }
 
 module.exports = {

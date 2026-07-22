@@ -18,7 +18,7 @@ const getPassById = asyncHandler(async (req, res) => {
   return apiResponse.success(
     res,
     pass,
-    'Pass fetched successfully.'
+    'Pass fetched successfully.',
   );
 
 });
@@ -38,7 +38,7 @@ const getPassesByOrder = asyncHandler(async (req, res) => {
   return apiResponse.success(
     res,
     passes,
-    'Passes fetched successfully.'
+    'Passes fetched successfully.',
   );
 
 });
@@ -61,7 +61,7 @@ const checkInPass = asyncHandler(async (req, res) => {
   return apiResponse.success(
     res,
     result,
-    'Pass checked in successfully.'
+    'Pass checked in successfully.',
   );
 
 });
@@ -81,7 +81,7 @@ const cancelPass = asyncHandler(async (req, res) => {
   return apiResponse.success(
     res,
     result,
-    'Pass cancelled successfully.'
+    'Pass cancelled successfully.',
   );
 
 });
