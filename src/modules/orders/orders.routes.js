@@ -48,6 +48,18 @@ router.get(
 );
 
 /**
+ * Get all verified orders.
+ *
+ * GET /orders/admin/verified
+ */
+router.get(
+  '/admin/verified',
+  authMiddleware.protect,
+  adminMiddleware.verifyAdminKey,
+  orderController.getVerifiedOrders,
+);
+
+/**
  * Get complete order details.
  *
  * GET /orders/admin/:orderId

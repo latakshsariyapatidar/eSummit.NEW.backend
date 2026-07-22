@@ -179,6 +179,25 @@ describe('Orders Module Routes (/api/orders)', () => {
       expect(res.body.data.length).toBe(1);
     });
 
+    test('GET /api/orders/admin/verified - should list verified orders for admin', async () => {
+      // Approve order first
+      await request(app)
+        .post(`/api/orders/admin/${testOrderId}/approve`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .set('x-admin-key', env.ADMIN_KEY);
+
+      const res = await request(app)
+        .get('/api/orders/admin/verified')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .set('x-admin-key', env.ADMIN_KEY);
+
+      expect(res.statusCode).toBe(200);
+      expect(Array.isArray(res.body.data)).toBe(true);
+      expect(res.body.data.length).toBe(1);
+      expect(res.body.data[0].status).toBe('verified');
+      expect(res.body.data[0].orderId).toBe(testOrderId);
+    });
+
     test('GET /api/orders/admin/:orderId - should fetch order details', async () => {
       const res = await request(app)
         .get(`/api/orders/admin/${testOrderId}`)

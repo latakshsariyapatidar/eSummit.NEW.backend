@@ -451,6 +451,23 @@ const rejectOrder = async ({ orderId, adminId, reason }) => {
 
 /**
  * ---------------------------------------------------------------------
+ * Fetch all verified orders.
+ * ---------------------------------------------------------------------
+ */
+
+const getVerifiedOrders = async () => {
+  return Order.find({
+    status: ORDER_STATUS.VERIFIED,
+  })
+    .populate('passes')
+    .sort({
+      verifiedAt: -1,
+      createdAt: -1,
+    });
+};
+
+/**
+ * ---------------------------------------------------------------------
  * Exports
  * ---------------------------------------------------------------------
  */
@@ -462,9 +479,12 @@ module.exports = {
 
   getPendingOrders,
 
+  getVerifiedOrders,
+
   getOrderDetails,
 
   approveOrder,
 
   rejectOrder,
 };
+

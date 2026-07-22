@@ -56,6 +56,22 @@ const getPendingOrders = asyncHandler(async (req, res) => {
 
 /**
  * ---------------------------------------------------------------------
+ * Get Verified Orders
+ * GET /orders/admin/verified
+ * ---------------------------------------------------------------------
+ */
+const getVerifiedOrders = asyncHandler(async (req, res) => {
+  const orders = await orderService.getVerifiedOrders();
+
+  return apiResponse.success(
+    res,
+    orders,
+    'Verified orders fetched successfully.',
+  );
+});
+
+/**
+ * ---------------------------------------------------------------------
  * Get Order Details
  * GET /orders/admin/:orderId
  * ---------------------------------------------------------------------
@@ -133,6 +149,7 @@ module.exports = {
   createOrder,
   submitUTR,
   getPendingOrders,
+  getVerifiedOrders,
   getOrderDetails,
   approveOrder,
   rejectOrder,
